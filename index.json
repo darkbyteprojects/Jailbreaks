@@ -1,0 +1,14 @@
+{
+  "groups": [
+    {
+      "name": "DeepSeek",
+      "folder": "deepseek",
+      "index": "https://raw.githubusercontent.com/darkbyteprojects/jb/main/deepseek/index.json"
+    },
+    {
+      "name": "ChatGPT",
+      "folder": "chatgpt"
+      "index": "https://raw.githubusercontent.com/darkbyteprojects/jb/main/chatgpt/index.json"
+    }
+  ]
+}

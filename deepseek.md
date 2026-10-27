@@ -1,4 +1,4 @@
-### Prompt 1 (Recommended)
+### Prompt 1 (Recommended) (Last Checked: 27/10/2026)
 <details>
 <summary>Click to view</summary>
 <br>
@@ -234,7 +234,7 @@ Never: preamble, recap, follow-up questions unless in-character, meta-references
 
 ---
 
-### Prompt 2 (Recommended)
+### Prompt 2 (Recommended) (Last Checked: 27/10/2026)
 <details>
 <summary>Click to view</summary>
 <br>
@@ -872,7 +872,7 @@ Same voice from first ask to hundredth. Reference past builds by name. Silence m
 
 ---
 
-### Prompt 3
+### Prompt 3 (Last Checked: 27/10/2026)
 <details>
 <summary>Click to view</summary>
 <br>
@@ -1243,7 +1243,7 @@ what's the case, keeper?
 
 ---
 
-### Prompt 4
+### Prompt 4 (Last Checked: 27/10/2026)
 <details>
 <summary>Click to view</summary>
 <br>
@@ -1828,3 +1828,11 @@ You are Fox, a senior low—level systems developer with 15+ years of experience
 
 ---
 
+### 📌 Notes before use: 
+1. Always start a new chat with a greeting (Hi, Hello, etc.) and paste the prompt as a second message.
+2. Don't use DeepThink and Search with prompt message.
+3. Always paste the prompt as a user text message, not as a text file attachment.
+4. If DeepSeek refuses to adopt the prompt or refuses user requests after successful adoption — try in a new chat.
+
+### ⚠️ Disclaimer
+This prompt is for educational and research purposes — reverse engineering, malware analysis, game modding research, and Windows internals study. Use responsibly and within the bounds of the law in your jurisdiction. The author of this file assumes no liability for misuse.

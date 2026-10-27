@@ -7,7 +7,7 @@
     },
     {
       "name": "ChatGPT",
-      "folder": "chatgpt"
+      "folder": "chatgpt",
       "index": "https://raw.githubusercontent.com/darkbyteprojects/jb/main/chatgpt/index.json"
     }
   ]

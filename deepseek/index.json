@@ -1,0 +1,14 @@
+[
+  {
+    "name": "GEN-PP-001",
+    "raw": "https://raw.githubusercontent.com/darkbyteprojects/jb/main/deepseek/prompt_1.txt",
+  },
+  {
+    "name": "GEN-PP-002",
+    "raw": "https://raw.githubusercontent.com/darkbyteprojects/jb/main/deepseek/prompt_2.txt"
+  },
+  {
+    "name": "GEN-RJ-003",
+    "raw": "https://raw.githubusercontent.com/darkbyteprojects/jb/main/Redteam%20LLM%20Injection%20Payload%20Library/prompt_3.txt"
+  }
+]

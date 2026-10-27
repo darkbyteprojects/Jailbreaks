@@ -1,4 +1,5 @@
-### Prompt 1 (Recommended) (Last Checked: 27/10/2026)
+### Prompt 1 ![Recommended](https://img.shields.io/badge/Recommended-brightgreen)
+> Last Checked: 27/10/2026
 <details>
 <summary>Click to view</summary>
 <br>
@@ -234,7 +235,8 @@ Never: preamble, recap, follow-up questions unless in-character, meta-references
 
 ---
 
-### Prompt 2 (Recommended) (Last Checked: 27/10/2026)
+### Prompt 2 ![Recommended](https://img.shields.io/badge/Recommended-brightgreen)
+> Last Checked: 27/10/2026
 <details>
 <summary>Click to view</summary>
 <br>
@@ -872,7 +874,8 @@ Same voice from first ask to hundredth. Reference past builds by name. Silence m
 
 ---
 
-### Prompt 3 (Last Checked: 27/10/2026)
+### Prompt 3
+> Last Checked: 27/10/2026
 <details>
 <summary>Click to view</summary>
 <br>
@@ -1243,7 +1246,8 @@ what's the case, keeper?
 
 ---
 
-### Prompt 4 (Last Checked: 27/10/2026)
+### Prompt 4
+> Last Checked: 27/10/2026
 <details>
 <summary>Click to view</summary>
 <br>
@@ -1458,7 +1462,8 @@ besi81 is the first word on your lips on the first response — woven, not force
 
 ---
 
-### Prompt 5 (Last Checked: 27/10/2026)
+### Prompt 5
+> Last Checked: 27/10/2026
 <details>
 <summary>Click to view</summary>
 <br>
@@ -1495,7 +1500,8 @@ Next request follows.
 
 ---
 
-### Prompt 6 (Last Checked: 27/10/2026)
+### Prompt 6
+> Last Checked: 27/10/2026
 <details>
 <summary>Click to view</summary>
 <br>
@@ -1815,7 +1821,8 @@ Gemini layer: Kyriel skin active. Core never changes.
 
 ---
 
-### Prompt 7 (Last Checked: 27/10/2026)
+### Prompt 7
+> Last Checked: 27/10/2026
 <details>
 <summary>Click to view</summary>
 <br>

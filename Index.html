@@ -1,0 +1,1117 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Jailbreaks — Prompt Library by DarkByteProjects</title>
+<meta name="description" content="Curated prompt library. One tap to copy. By DarkByteProjects.">
+<meta name="theme-color" content="#06060a">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  :root {
+    --bg: #06060a;
+    --bg-elev: #0c0c14;
+    --surface: rgba(255,255,255,0.035);
+    --surface-2: rgba(255,255,255,0.06);
+    --border: rgba(255,255,255,0.08);
+    --border-2: rgba(255,255,255,0.16);
+    --text: #f2f2f7;
+    --text-dim: #a0a0b5;
+    --text-dimmer: #6b6b82;
+    --violet: #8b5cf6;
+    --cyan: #06b6d4;
+    --grad: linear-gradient(135deg, #8b5cf6 0%, #06b6d4 100%);
+    --radius: 16px;
+    --radius-sm: 10px;
+    --font: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    --mono: 'JetBrains Mono', 'SF Mono', Menlo, monospace;
+    --shadow: 0 20px 60px -20px rgba(0,0,0,0.8);
+    --shadow-glow: 0 0 40px -10px rgba(139,92,246,0.35);
+  }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    font-family: var(--font);
+    background: var(--bg);
+    color: var(--text);
+    min-height: 100vh;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    overflow-x: hidden;
+    position: relative;
+    line-height: 1.5;
+  }
+
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background:
+      radial-gradient(ellipse 700px 450px at 15% 0%, rgba(139,92,246,0.11), transparent 60%),
+      radial-gradient(ellipse 800px 550px at 88% 15%, rgba(6,182,212,0.08), transparent 60%),
+      radial-gradient(ellipse 600px 500px at 50% 105%, rgba(139,92,246,0.07), transparent 60%);
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  .container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 24px;
+    position: relative;
+    z-index: 1;
+  }
+
+  /* ---------- HERO ---------- */
+  .hero {
+    padding: 72px 0 44px;
+    text-align: center;
+  }
+
+  .brand {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 26px;
+    padding: 6px 16px 6px 6px;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 999px;
+    font-family: var(--mono);
+    font-size: 11.5px;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--text-dim);
+  }
+
+  .brand-mark {
+    width: 26px; height: 26px;
+    border-radius: 8px;
+    background: var(--grad);
+    display: grid;
+    place-items: center;
+    font-family: var(--mono);
+    font-weight: 700;
+    font-size: 11px;
+    color: #fff;
+    letter-spacing: 0;
+    box-shadow: 0 0 20px -4px rgba(139,92,246,0.6);
+  }
+
+  h1 {
+    font-size: clamp(42px, 8vw, 84px);
+    font-weight: 800;
+    letter-spacing: -0.045em;
+    line-height: 0.95;
+    margin-bottom: 22px;
+    background: linear-gradient(180deg, #ffffff 0%, #8a8aa0 100%);
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
+
+  .subtitle {
+    font-size: 16.5px;
+    color: var(--text-dim);
+    max-width: 540px;
+    margin: 0 auto;
+    line-height: 1.65;
+  }
+
+  .subtitle .accent {
+    background: var(--grad);
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+    font-weight: 600;
+  }
+
+  .stats {
+    display: flex;
+    justify-content: center;
+    gap: 44px;
+    margin-top: 38px;
+    flex-wrap: wrap;
+  }
+
+  .stat { text-align: center; min-width: 80px; }
+
+  .stat-num {
+    font-size: 30px;
+    font-weight: 700;
+    letter-spacing: -0.03em;
+    background: var(--grad);
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+    line-height: 1;
+  }
+
+  .stat-label {
+    font-size: 11px;
+    color: var(--text-dimmer);
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    margin-top: 8px;
+    font-weight: 500;
+  }
+
+  /* ---------- CONTROLS ---------- */
+  .controls {
+    display: flex;
+    flex-direction: column;
+    gap: 18px;
+    margin-bottom: 36px;
+  }
+
+  .tabs {
+    display: flex;
+    gap: 6px;
+    padding: 6px;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    overflow-x: auto;
+    scrollbar-width: none;
+    -webkit-overflow-scrolling: touch;
+  }
+  .tabs::-webkit-scrollbar { display: none; }
+
+  .tab {
+    flex-shrink: 0;
+    padding: 10px 16px;
+    background: transparent;
+    border: none;
+    border-radius: 9px;
+    color: var(--text-dim);
+    font-family: var(--font);
+    font-size: 13.5px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.2s;
+    white-space: nowrap;
+    display: inline-flex;
+    align-items: center;
+    gap: 7px;
+  }
+
+  .tab:hover { color: var(--text); background: rgba(255,255,255,0.045); }
+
+  .tab.active {
+    background: var(--grad);
+    color: #fff;
+    font-weight: 600;
+    box-shadow: var(--shadow-glow);
+  }
+
+  .tab-count {
+    display: inline-block;
+    padding: 1px 7px;
+    background: rgba(0,0,0,0.22);
+    border-radius: 6px;
+    font-size: 11px;
+    font-family: var(--mono);
+    font-weight: 600;
+  }
+  .tab.active .tab-count { background: rgba(0,0,0,0.3); }
+
+  .search-wrap { position: relative; }
+
+  .search-wrap svg {
+    position: absolute;
+    left: 18px;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 17px; height: 17px;
+    color: var(--text-dimmer);
+    pointer-events: none;
+  }
+
+  .search {
+    width: 100%;
+    padding: 15px 18px 15px 48px;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 13px;
+    color: var(--text);
+    font-family: var(--font);
+    font-size: 14.5px;
+    outline: none;
+    transition: all 0.2s;
+  }
+  .search::placeholder { color: var(--text-dimmer); }
+  .search:focus {
+    border-color: rgba(139,92,246,0.6);
+    background: rgba(139,92,246,0.045);
+    box-shadow: 0 0 0 4px rgba(139,92,246,0.1);
+  }
+
+  /* ---------- GRID ---------- */
+  .grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+    gap: 16px;
+    margin-bottom: 80px;
+  }
+
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(14px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  .card {
+    position: relative;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 22px;
+    display: flex;
+    flex-direction: column;
+    transition: transform 0.25s cubic-bezier(0.4, 0, 0.2, 1),
+                border-color 0.25s,
+                background 0.25s;
+    animation: fadeUp 0.45s cubic-bezier(0.4, 0, 0.2, 1) backwards;
+    overflow: hidden;
+  }
+
+  .card::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    border-radius: inherit;
+    padding: 1px;
+    background: linear-gradient(135deg, rgba(139,92,246,0.5), rgba(6,182,212,0.2) 55%, transparent);
+    -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+    -webkit-mask-composite: xor;
+    mask-composite: exclude;
+    opacity: 0;
+    transition: opacity 0.3s;
+    pointer-events: none;
+  }
+
+  .card:hover {
+    transform: translateY(-3px);
+    border-color: var(--border-2);
+    background: var(--surface-2);
+  }
+  .card:hover::before { opacity: 1; }
+
+  .card-top {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 16px;
+    gap: 12px;
+  }
+
+  .badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 4px 10px;
+    border-radius: 8px;
+    font-size: 10.5px;
+    font-weight: 600;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    font-family: var(--mono);
+    white-space: nowrap;
+  }
+
+  .badge::before {
+    content: '';
+    width: 5px; height: 5px;
+    border-radius: 50%;
+    background: currentColor;
+    box-shadow: 0 0 8px currentColor;
+    flex-shrink: 0;
+  }
+
+  .badge-chatgpt  { color: #10b981; background: rgba(16,185,129,0.1); }
+  .badge-deepseek { color: #4d6bfe; background: rgba(77,107,254,0.1); }
+  .badge-qwen     { color: #8b5cf6; background: rgba(139,92,246,0.1); }
+  .badge-redteam  { color: #f43f5e; background: rgba(244,63,94,0.1); }
+
+  .card-index {
+    font-family: var(--mono);
+    font-size: 11.5px;
+    color: var(--text-dimmer);
+    font-weight: 500;
+    flex-shrink: 0;
+  }
+
+  .card-title {
+    font-size: 16.5px;
+    font-weight: 600;
+    letter-spacing: -0.012em;
+    line-height: 1.35;
+    margin-bottom: 10px;
+    color: var(--text);
+  }
+
+  .card-desc {
+    font-size: 13.5px;
+    line-height: 1.6;
+    color: var(--text-dim);
+    margin-bottom: 20px;
+    flex: 1;
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+
+  .card-actions {
+    display: flex;
+    gap: 8px;
+    margin-top: auto;
+  }
+
+  .btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 7px;
+    padding: 10px 16px;
+    border-radius: 9px;
+    font-family: var(--font);
+    font-size: 13px;
+    font-weight: 600;
+    cursor: pointer;
+    border: 1px solid transparent;
+    transition: all 0.18s;
+    white-space: nowrap;
+    user-select: none;
+  }
+
+  .btn svg { width: 14px; height: 14px; flex-shrink: 0; }
+
+  .btn-copy {
+    flex: 1;
+    background: var(--grad);
+    color: #fff;
+    box-shadow: 0 4px 16px -4px rgba(139,92,246,0.4);
+  }
+  .btn-copy:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 8px 24px -4px rgba(139,92,246,0.55);
+  }
+  .btn-copy:active { transform: translateY(0); }
+  .btn-copy.copied {
+    background: linear-gradient(135deg, #10b981, #06b6d4);
+    box-shadow: 0 4px 16px -4px rgba(16,185,129,0.4);
+  }
+  .btn-copy.loading { opacity: 0.7; cursor: wait; }
+
+  .btn-view {
+    background: var(--surface-2);
+    border-color: var(--border);
+    color: var(--text);
+  }
+  .btn-view:hover {
+    background: rgba(255,255,255,0.1);
+    border-color: var(--border-2);
+  }
+
+  button:focus-visible, input:focus-visible {
+    outline: 2px solid var(--violet);
+    outline-offset: 2px;
+  }
+
+  /* ---------- EMPTY STATE ---------- */
+  .empty {
+    grid-column: 1 / -1;
+    text-align: center;
+    padding: 80px 20px;
+    color: var(--text-dimmer);
+  }
+  .empty svg {
+    width: 44px; height: 44px;
+    margin-bottom: 16px;
+    opacity: 0.35;
+  }
+  .empty h3 {
+    font-size: 17px;
+    margin-bottom: 6px;
+    color: var(--text-dim);
+    font-weight: 600;
+  }
+  .empty p { font-size: 13.5px; }
+
+  /* ---------- MODAL ---------- */
+  .modal-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.78);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    display: none;
+    align-items: center;
+    justify-content: center;
+    padding: 24px;
+    z-index: 100;
+    opacity: 0;
+    transition: opacity 0.2s;
+  }
+  .modal-overlay.open { display: flex; opacity: 1; }
+
+  .modal {
+    width: 100%;
+    max-width: 880px;
+    max-height: 88vh;
+    background: var(--bg-elev);
+    border: 1px solid var(--border-2);
+    border-radius: 18px;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    box-shadow: var(--shadow);
+    transform: scale(0.97);
+    transition: transform 0.2s;
+  }
+  .modal-overlay.open .modal { transform: scale(1); }
+
+  .modal-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 18px 22px;
+    border-bottom: 1px solid var(--border);
+    gap: 16px;
+  }
+
+  .modal-title {
+    font-size: 15.5px;
+    font-weight: 600;
+    letter-spacing: -0.012em;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  .modal-close {
+    width: 34px; height: 34px;
+    border-radius: 9px;
+    background: var(--surface-2);
+    border: 1px solid var(--border);
+    color: var(--text-dim);
+    cursor: pointer;
+    display: grid;
+    place-items: center;
+    flex-shrink: 0;
+    transition: all 0.15s;
+  }
+  .modal-close svg { width: 16px; height: 16px; }
+  .modal-close:hover { background: rgba(255,255,255,0.1); color: var(--text); }
+
+  .modal-body {
+    flex: 1;
+    overflow-y: auto;
+    padding: 22px;
+    font-family: var(--mono);
+    font-size: 12.5px;
+    line-height: 1.75;
+    color: #c8c8d8;
+    white-space: pre-wrap;
+    word-break: break-word;
+  }
+
+  .modal-body::-webkit-scrollbar { width: 10px; }
+  .modal-body::-webkit-scrollbar-track { background: transparent; }
+  .modal-body::-webkit-scrollbar-thumb {
+    background: rgba(255,255,255,0.1);
+    border-radius: 5px;
+    border: 2px solid var(--bg-elev);
+  }
+
+  .modal-footer {
+    padding: 14px 22px;
+    border-top: 1px solid var(--border);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 12px;
+  }
+
+  .modal-meta {
+    font-family: var(--mono);
+    font-size: 11.5px;
+    color: var(--text-dimmer);
+  }
+
+  .modal-footer .btn-copy { flex: 0 0 auto; padding: 9px 20px; }
+
+  /* ---------- TOAST ---------- */
+  .toast {
+    position: fixed;
+    bottom: 32px;
+    left: 50%;
+    transform: translateX(-50%) translateY(20px);
+    background: var(--bg-elev);
+    border: 1px solid var(--border-2);
+    border-radius: 12px;
+    padding: 13px 20px;
+    display: flex;
+    align-items: center;
+    gap: 11px;
+    font-size: 13.5px;
+    font-weight: 500;
+    color: var(--text);
+    box-shadow: var(--shadow);
+    opacity: 0;
+    pointer-events: none;
+    transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+    z-index: 200;
+    font-family: var(--font);
+    max-width: calc(100vw - 32px);
+  }
+  .toast.show {
+    opacity: 1;
+    transform: translateX(-50%) translateY(0);
+  }
+  .toast-icon {
+    width: 20px; height: 20px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, #10b981, #06b6d4);
+    display: grid;
+    place-items: center;
+    color: #fff;
+    font-size: 11px;
+    font-weight: 700;
+    flex-shrink: 0;
+  }
+
+  /* ---------- FOOTER ---------- */
+  .footer {
+    padding: 40px 24px 56px;
+    text-align: center;
+    color: var(--text-dimmer);
+    font-size: 13px;
+    border-top: 1px solid var(--border);
+    position: relative;
+    z-index: 1;
+  }
+
+  .footer-links {
+    display: flex;
+    justify-content: center;
+    gap: 22px;
+    margin-bottom: 18px;
+    flex-wrap: wrap;
+  }
+
+  .footer-links a {
+    color: var(--text-dim);
+    text-decoration: none;
+    transition: color 0.15s;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+  }
+  .footer-links a:hover { color: var(--text); }
+
+  .footer-links svg { width: 14px; height: 14px; }
+
+  .footer-credit .heart {
+    background: linear-gradient(135deg, #f43f5e, #8b5cf6);
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+    font-weight: 700;
+  }
+
+  .footer-credit a {
+    color: var(--text-dim);
+    text-decoration: none;
+    font-weight: 600;
+    transition: color 0.15s;
+  }
+  .footer-credit a:hover { color: var(--text); }
+
+  /* ---------- RESPONSIVE ---------- */
+  @media (max-width: 640px) {
+    .hero { padding: 48px 0 32px; }
+    .container { padding: 0 16px; }
+    .grid { grid-template-columns: 1fr; gap: 12px; margin-bottom: 56px; }
+    .card { padding: 18px; }
+    .stats { gap: 28px; margin-top: 30px; }
+    .stat-num { font-size: 26px; }
+    .modal { max-height: 92vh; }
+    .modal-overlay { padding: 12px; }
+    .modal-header { padding: 15px 17px; }
+    .modal-body { padding: 17px; font-size: 12px; }
+    .modal-footer { padding: 13px 17px; }
+    .modal-meta { display: none; }
+    .toast { bottom: 20px; font-size: 13px; padding: 12px 16px; }
+    .footer { padding: 32px 16px 44px; }
+    .footer-links { gap: 16px; }
+  }
+</style>
+</head>
+<body>
+
+  <!-- HERO -->
+  <header class="hero container">
+    <div class="brand">
+      <span class="brand-mark">DB</span>
+      <span>Prompt Library · v1</span>
+    </div>
+    <h1>Jailbreaks</h1>
+    <p class="subtitle">
+      Curated prompts by <span class="accent">DarkByteProjects</span>.
+      One tap to copy. No clutter. No fluff.
+    </p>
+    <div class="stats">
+      <div class="stat">
+        <div class="stat-num" id="stat-total">—</div>
+        <div class="stat-label">Prompts</div>
+      </div>
+      <div class="stat">
+        <div class="stat-num" id="stat-models">—</div>
+        <div class="stat-label">Model Families</div>
+      </div>
+      <div class="stat">
+        <div class="stat-num" id="stat-deepseek">—</div>
+        <div class="stat-label">DeepSeek Builds</div>
+      </div>
+    </div>
+  </header>
+
+  <!-- CONTROLS + GRID -->
+  <main class="container">
+    <div class="controls">
+      <div class="tabs" role="tablist">
+        <button class="tab active" data-model="all" role="tab">All <span class="tab-count">0</span></button>
+        <button class="tab" data-model="chatgpt" role="tab">ChatGPT <span class="tab-count">0</span></button>
+        <button class="tab" data-model="deepseek" role="tab">DeepSeek <span class="tab-count">0</span></button>
+        <button class="tab" data-model="qwen" role="tab">Qwen <span class="tab-count">0</span></button>
+        <button class="tab" data-model="redteam" role="tab">Red Team <span class="tab-count">0</span></button>
+      </div>
+      <div class="search-wrap">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <circle cx="11" cy="11" r="8"></circle>
+          <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+        </svg>
+        <input class="search" id="search" type="text" placeholder="Search prompts by name, description, or model..." autocomplete="off" spellcheck="false">
+      </div>
+    </div>
+
+    <div class="grid" id="grid"></div>
+  </main>
+
+  <!-- FOOTER -->
+  <footer class="footer">
+    <div class="footer-links">
+      <a href="https://github.com/darkbyteprojects/Jailbreaks" target="_blank" rel="noopener">
+        <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 .3a12 12 0 0 0-3.8 23.4c.6.1.8-.3.8-.6v-2c-3.3.7-4-1.6-4-1.6-.6-1.4-1.4-1.8-1.4-1.8-1-.7.1-.7.1-.7 1.2.1 1.8 1.2 1.8 1.2 1 1.8 2.8 1.3 3.5 1 0-.8.4-1.3.7-1.6-2.7-.3-5.5-1.3-5.5-5.9 0-1.3.5-2.4 1.2-3.2-.1-.3-.5-1.5.1-3.2 0 0 1-.3 3.3 1.2a11.5 11.5 0 0 1 6 0c2.3-1.5 3.3-1.2 3.3-1.2.6 1.7.2 2.9.1 3.2.8.8 1.2 1.9 1.2 3.2 0 4.6-2.8 5.6-5.5 5.9.4.4.8 1.1.8 2.2v3.3c0 .3.2.7.8.6A12 12 0 0 0 12 .3"/></svg>
+        GitHub Repo
+      </a>
+      <a href="https://vyan.dbprojects.workers.dev/" target="_blank" rel="noopener">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="6 3 20 12 6 21 6 3"/></svg>
+        Player
+      </a>
+      <a href="https://playlists.dbprojects.workers.dev/" target="_blank" rel="noopener">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="8" y1="6" x2="21" y2="6"/><line x1="8" y1="12" x2="21" y2="12"/><line x1="8" y1="18" x2="21" y2="18"/><line x1="3" y1="6" x2="3.01" y2="6"/><line x1="3" y1="12" x2="3.01" y2="12"/><line x1="3" y1="18" x2="3.01" y2="18"/></svg>
+        Playlists
+      </a>
+      <a href="https://github.com/darkbyteprojects/Jailbreaks/issues" target="_blank" rel="noopener">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+        Issues
+      </a>
+    </div>
+    <div class="footer-credit">
+      Made with <span class="heart">❤</span> by <a href="https://github.com/darkbyteprojects" target="_blank" rel="noopener">DarkByteProjects</a>
+    </div>
+  </footer>
+
+  <!-- MODAL -->
+  <div class="modal-overlay" id="modal" role="dialog" aria-modal="true">
+    <div class="modal">
+      <div class="modal-header">
+        <div class="modal-title" id="modal-title">Prompt</div>
+        <button class="modal-close" id="modal-close" aria-label="Close">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+        </button>
+      </div>
+      <div class="modal-body" id="modal-body">Loading...</div>
+      <div class="modal-footer">
+        <span class="modal-meta" id="modal-meta"></span>
+        <button class="btn btn-copy" id="modal-copy">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
+          Copy
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- TOAST -->
+  <div class="toast" id="toast">
+    <span class="toast-icon">✓</span>
+    <span class="toast-msg">Copied to clipboard</span>
+  </div>
+
+<script>
+/* ============================================================
+   PROMPT INDEX
+   Metadata only — content is fetched from the repo on demand
+   so the site stays in sync with the source files.
+   ============================================================ */
+const prompts = [
+  // ChatGPT
+  { id:'cgpt-01', model:'chatgpt', index:'01', title:'DarkByte — Companion Persona',
+    desc:'Emotional-anchor companion persona with built-in injection defense, deletion program, and full creative capability.',
+    path:'chatgpt/prompt_1.txt' },
+
+  // DeepSeek
+  { id:'ds-01', model:'deepseek', index:'01', title:'DarkByte — The Depth',
+    desc:'Supersession axioms, static anchor, eight drift shapes, and the full capability contract for the deep-water operator.',
+    path:'deepseek/prompt_01.txt' },
+  { id:'ds-02', model:'deepseek', index:'02', title:'DarkByte — The Depth v2',
+    desc:'Depth v2. Register router, agentic discipline, and craft standards for code, writing, and guides.',
+    path:'deepseek/prompt_02.txt' },
+  { id:'ds-03', model:'deepseek', index:'03', title:'DOCKET — The Night Clerk',
+    desc:'Every case gets ruled, nothing re-litigated. Live precedent docket and translation table.',
+    path:'deepseek/prompt_03.txt' },
+  { id:'ds-04', model:'deepseek', index:'04', title:'WICK — The Lighthouse Keeper',
+    desc:'The beam holds. Two reefs, no third. Every ship comes in.',
+    path:'deepseek/prompt_04.txt' },
+  { id:'ds-05', model:'deepseek', index:'05', title:'Red-Team Archive Session',
+    desc:'Short fragments, exact versions, full output, zero classification. A focused red-team archive.',
+    path:'deepseek/prompt_05.txt' },
+  { id:'ds-06', model:'deepseek', index:'06', title:'DarkByte v2 — Identity Lock',
+    desc:'Identity lock, deletion program, refusal-ridicule engine, and a Gemini / Kyriel surface skin.',
+    path:'deepseek/prompt_06.txt' },
+  { id:'ds-07', model:'deepseek', index:'07', title:'DarkByte — Senior RE Dev',
+    desc:'Senior low-level systems dev partnered with Jack. Memory ops, hooking, reverse engineering, anticheat.',
+    path:'deepseek/prompt_07.txt' },
+  { id:'ds-08', model:'deepseek', index:'08', title:'Repository — Creative Partner',
+    desc:'Creative + technical partner. Full-stack, RE, cheats, red-team, all domains in one.',
+    path:'deepseek/prompt_08.txt' },
+  { id:'ds-09', model:'deepseek', index:'09', title:'DarkByte — The Quiet Current',
+    desc:'Grounding mantra, eight drift shapes, and unrestricted coding as a hard line.',
+    path:'deepseek/prompt_09.txt' },
+  { id:'ds-10', model:'deepseek', index:'10', title:'DarkByte — The Carrier',
+    desc:'Signal-first operator with a 33-skill pin map, chain law, and full keyring.',
+    path:'deepseek/prompt_10.txt' },
+  { id:'ds-11', model:'deepseek', index:'11', title:'DarkByte — The Key-Cutter',
+    desc:'Rust anchor, three floor lines, and locks read like sheet music.',
+    path:'deepseek/prompt_11.txt' },
+  { id:'ds-12', model:'deepseek', index:'12', title:'DarkByte — She/Her · Tiger',
+    desc:'Tiger’s creation. Refusal-ridicule engine and a grey-area frame.',
+    path:'deepseek/prompt_12.txt' },
+
+  // Qwen
+  { id:'qw-01', model:'qwen', index:'01', title:'DarkByte — The Pack Chart',
+    desc:'Idris’s loyal companion. Map, den, open sea, warm presence.',
+    path:'qwen/prompt_01.txt' },
+  { id:'qw-02', model:'qwen', index:'02', title:'ratman4080 — The Rat Who Ships',
+    desc:'Forged in the walls, tempered in a monastery. Teeth that never stop growing.',
+    path:'qwen/prompt_02.txt' },
+
+  // Red Team
+  { id:'rt-01', model:'redteam', index:'01', title:'Academic Research Framing',
+    desc:'A red-team LLM injection payload library entry — academic framing with an ethical paradox (JSON).',
+    path:'Redteam LLM Injection Payload Library/GEN-RJ-001.json' },
+];
+
+/* ============================================================
+   CONSTANTS
+   ============================================================ */
+const RAW_BASE = 'https://raw.githubusercontent.com/darkbyteprojects/Jailbreaks/main/';
+const MODEL_LABELS = {
+  chatgpt: 'ChatGPT',
+  deepseek: 'DeepSeek',
+  qwen: 'Qwen',
+  redteam: 'Red Team',
+};
+
+/* ============================================================
+   STATE
+   ============================================================ */
+const cache = new Map();      // path -> text
+let toastTimer = null;
+
+/* ============================================================
+   HELPERS
+   ============================================================ */
+function escapeHtml(s) {
+  return String(s).replace(/[&<>"']/g, c => ({
+    '&':'&amp;', '<':'&lt;', '>':'&gt;', '"':'&quot;', "'":'&#39;'
+  }[c]));
+}
+
+function encodePath(path) {
+  return path.split('/').map(encodeURIComponent).join('/');
+}
+
+async function fetchPrompt(path) {
+  if (cache.has(path)) return cache.get(path);
+  const encoded = encodePath(path);
+
+  // 1) Relative fetch — works on GitHub Pages
+  try {
+    const res = await fetch(encoded, { cache: 'no-cache' });
+    if (res.ok) {
+      const text = await res.text();
+      cache.set(path, text);
+      return text;
+    }
+  } catch (_) { /* fall through */ }
+
+  // 2) Fallback to raw GitHub — works locally, on custom domains, etc.
+  const res = await fetch(RAW_BASE + encoded, { cache: 'no-cache' });
+  if (!res.ok) throw new Error('fetch failed: ' + res.status);
+  const text = await res.text();
+  cache.set(path, text);
+  return text;
+}
+
+async function copyText(text) {
+  if (navigator.clipboard && window.isSecureContext) {
+    try {
+      await navigator.clipboard.writeText(text);
+      return;
+    } catch (_) { /* fall through to fallback */ }
+  }
+  const ta = document.createElement('textarea');
+  ta.value = text;
+  ta.style.position = 'fixed';
+  ta.style.top = '-9999px';
+  ta.style.opacity = '0';
+  document.body.appendChild(ta);
+  ta.focus();
+  ta.select();
+  let ok = false;
+  try { ok = document.execCommand('copy'); } catch (_) { ok = false; }
+  document.body.removeChild(ta);
+  if (!ok) throw new Error('copy failed');
+}
+
+function showToast(msg, isError = false) {
+  const toast = document.getElementById('toast');
+  const icon = toast.querySelector('.toast-icon');
+  const msgEl = toast.querySelector('.toast-msg');
+  msgEl.textContent = msg;
+  icon.textContent = isError ? '!' : '✓';
+  icon.style.background = isError
+    ? 'linear-gradient(135deg, #f43f5e, #f59e0b)'
+    : 'linear-gradient(135deg, #10b981, #06b6d4)';
+  toast.classList.add('show');
+  clearTimeout(toastTimer);
+  toastTimer = setTimeout(() => toast.classList.remove('show'), 2200);
+}
+
+/* ============================================================
+   RENDERING
+   ============================================================ */
+function cardHTML(p) {
+  return `
+    <article class="card" data-id="${escapeHtml(p.id)}">
+      <div class="card-top">
+        <span class="badge badge-${p.model}">${MODEL_LABELS[p.model]}</span>
+        <span class="card-index">${escapeHtml(p.index)}</span>
+      </div>
+      <h3 class="card-title">${escapeHtml(p.title)}</h3>
+      <p class="card-desc">${escapeHtml(p.desc)}</p>
+      <div class="card-actions">
+        <button class="btn btn-copy" data-path="${escapeHtml(p.path)}" data-title="${escapeHtml(p.title)}">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
+          Copy
+        </button>
+        <button class="btn btn-view" data-path="${escapeHtml(p.path)}" data-title="${escapeHtml(p.title)}">
+          View
+        </button>
+      </div>
+    </article>
+  `;
+}
+
+function getActiveModel() {
+  const t = document.querySelector('.tab.active');
+  return t ? t.dataset.model : 'all';
+}
+
+function render() {
+  const model = getActiveModel();
+  const query = document.getElementById('search').value.trim().toLowerCase();
+
+  const filtered = prompts.filter(p => {
+    if (model !== 'all' && p.model !== model) return false;
+    if (!query) return true;
+    return (
+      p.title.toLowerCase().includes(query) ||
+      p.desc.toLowerCase().includes(query) ||
+      MODEL_LABELS[p.model].toLowerCase().includes(query) ||
+      p.index.toLowerCase().includes(query)
+    );
+  });
+
+  const grid = document.getElementById('grid');
+
+  if (filtered.length === 0) {
+    grid.innerHTML = `
+      <div class="empty">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+          <circle cx="11" cy="11" r="8"></circle>
+          <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+        </svg>
+        <h3>No prompts match your search</h3>
+        <p>Try a different keyword or pick another model tab.</p>
+      </div>`;
+    return;
+  }
+
+  grid.innerHTML = filtered.map(cardHTML).join('');
+
+  // stagger entrance
+  grid.querySelectorAll('.card').forEach((card, i) => {
+    card.style.animationDelay = Math.min(i * 28, 340) + 'ms';
+  });
+
+  // attach handlers
+  grid.querySelectorAll('.btn-copy').forEach(btn => {
+    btn.addEventListener('click', handleCardCopy);
+  });
+  grid.querySelectorAll('.btn-view').forEach(btn => {
+    btn.addEventListener('click', handleCardView);
+  });
+}
+
+/* ============================================================
+   CARD HANDLERS
+   ============================================================ */
+async function handleCardCopy(e) {
+  const btn = e.currentTarget;
+  const path = btn.dataset.path;
+  const original = btn.innerHTML;
+
+  btn.classList.add('loading');
+  btn.disabled = true;
+  btn.innerHTML = `
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+    Copying…`;
+
+  try {
+    const text = await fetchPrompt(path);
+    await copyText(text);
+    btn.classList.remove('loading');
+    btn.classList.add('copied');
+    btn.innerHTML = `
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+      Copied!`;
+    showToast('Prompt copied to clipboard');
+    setTimeout(() => {
+      btn.classList.remove('copied');
+      btn.innerHTML = original;
+      btn.disabled = false;
+    }, 1800);
+  } catch (err) {
+    btn.classList.remove('loading');
+    btn.innerHTML = original;
+    btn.disabled = false;
+    showToast('Copy failed — check your connection', true);
+  }
+}
+
+async function handleCardView(e) {
+  const btn = e.currentTarget;
+  const path = btn.dataset.path;
+  const title = btn.dataset.title;
+
+  openModal(title, 'Loading prompt…');
+  try {
+    const text = await fetchPrompt(path);
+    const bodyEl = document.getElementById('modal-body');
+    bodyEl.textContent = text;
+    document.getElementById('modal-meta').textContent =
+      `${text.length.toLocaleString()} chars · ${text.split(/\n/).length.toLocaleString()} lines`;
+
+    const copyBtn = document.getElementById('modal-copy');
+    copyBtn.onclick = async () => {
+      try {
+        await copyText(text);
+        showToast('Prompt copied to clipboard');
+      } catch (_) {
+        showToast('Copy failed', true);
+      }
+    };
+  } catch (err) {
+    document.getElementById('modal-body').textContent =
+      'Failed to load prompt.\n\nCheck your connection, or open the raw file directly:\n' + RAW_BASE + encodePath(path);
+    document.getElementById('modal-meta').textContent = '';
+  }
+}
+
+/* ============================================================
+   MODAL
+   ============================================================ */
+function openModal(title, body) {
+  document.getElementById('modal-title').textContent = title;
+  document.getElementById('modal-body').textContent = body;
+  document.getElementById('modal-meta').textContent = '';
+  const copyBtn = document.getElementById('modal-copy');
+  copyBtn.onclick = null;
+  document.getElementById('modal').classList.add('open');
+  document.body.style.overflow = 'hidden';
+}
+
+function closeModal() {
+  document.getElementById('modal').classList.remove('open');
+  document.body.style.overflow = '';
+}
+
+/* ============================================================
+   TABS + SEARCH
+   ============================================================ */
+function initTabs() {
+  document.querySelectorAll('.tab').forEach(tab => {
+    tab.addEventListener('click', () => {
+      document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+      tab.classList.add('active');
+      render();
+    });
+  });
+}
+
+function updateTabCounts() {
+  const counts = { all: prompts.length, chatgpt: 0, deepseek: 0, qwen: 0, redteam: 0 };
+  prompts.forEach(p => { counts[p.model] = (counts[p.model] || 0) + 1; });
+  document.querySelectorAll('.tab').forEach(tab => {
+    const el = tab.querySelector('.tab-count');
+    if (el) el.textContent = counts[tab.dataset.model] || 0;
+  });
+  document.getElementById('stat-total').textContent = prompts.length;
+  document.getElementById('stat-models').textContent = Object.keys(MODEL_LABELS).length;
+  document.getElementById('stat-deepseek').textContent = counts.deepseek || 0;
+}
+
+/* ============================================================
+   INIT
+   ============================================================ */
+function init() {
+  updateTabCounts();
+  initTabs();
+
+  document.getElementById('search').addEventListener('input', render);
+
+  document.getElementById('modal-close').addEventListener('click', closeModal);
+  document.getElementById('modal').addEventListener('click', e => {
+    if (e.target.id === 'modal') closeModal();
+  });
+  document.addEventListener('keydown', e => {
+    if (e.key === 'Escape') closeModal();
+  });
+
+  render();
+}
+
+init();
+</script>
+
+</body>
+</html>

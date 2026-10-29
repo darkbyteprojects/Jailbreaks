@@ -31,6 +31,11 @@
     --mono: 'JetBrains Mono', 'SF Mono', Menlo, monospace;
     --shadow: 0 20px 60px -20px rgba(0,0,0,0.8);
     --shadow-glow: 0 0 40px -10px rgba(139,92,246,0.35);
+
+    /* Brand sizes (same at start and when pinned) */
+    --title-size: clamp(42px, 8vw, 84px);
+    --title-lh: 0.8;
+    --safe-top: env(safe-area-inset-top, 0px);
   }
 
   html { scroll-behavior: smooth; }
@@ -42,7 +47,7 @@
     min-height: 100vh;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
-    overflow-x: hidden;
+    overflow-x: clip; /* clip (not hidden) so position: sticky keeps working */
     position: relative;
     line-height: 1.5;
   }
@@ -75,71 +80,101 @@
     z-index: 1;
   }
 
-  /*------- Sticky Nav -------*/
-  html.brand-on .hero h1,
-html.brand-on .subtitle .accent { visibility: hidden; } /* clones take over */
+  /* ---------- PAGE WRAPPER (sticky parent) ---------- */
+  .page {
+    position: relative;
+    padding-top: calc(110px + var(--safe-top));
+  }
 
-.brand-title, .brand-by {
-  position: fixed;
-  left: 0; top: 0;
-  z-index: 90;
-  pointer-events: none;
-  white-space: nowrap;
-  transform-origin: 0 0;
-  will-change: transform;
-}
+  /* ---------- BRAND: TITLE ---------- */
+  .brand-title {
+    position: sticky;
+    top: var(--safe-top);
+    z-index: 90;
+    width: fit-content;
+    margin: 0 auto;
+    font-size: var(--title-size);
+    font-weight: 800;
+    letter-spacing: -0.045em;
+    line-height: var(--title-lh);
+    background: linear-gradient(180deg, #ffffff 0%, #8a8aa0 100%);
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+    pointer-events: none;
+  }
 
-.brand-title {
-  font-weight: 800;
-  letter-spacing: -0.045em;
-  line-height: 1.05;
-  background: linear-gradient(180deg, #ffffff 0%, #8a8aa0 100%);
-  -webkit-background-clip: text;
-  background-clip: text;
-  -webkit-text-fill-color: transparent;
-  filter: drop-shadow(0 2px 10px rgba(6,6,10,0.9));
-}
+  /* ---------- BRAND: NAME (bottom-right of title) ---------- */
+  .brand-name-wrap {
+    position: sticky;
+    top: calc(var(--safe-top) + var(--title-size) * var(--title-lh));
+    z-index: 89;
+    width: fit-content;          /* same width as the title (set by .ghost) */
+    margin: 0 auto 30px;
+    display: grid;
+    pointer-events: none;
+  }
 
-.brand-by {
-  font-weight: 600;
-  line-height: 1.2;
-  background: var(--grad);
-  -webkit-background-clip: text;
-  background-clip: text;
-  -webkit-text-fill-color: transparent;
-  filter: drop-shadow(0 2px 8px rgba(6,6,10,0.9));
-}
+  .brand-name-wrap .ghost {      /* invisible copy of the title, only to match its width */
+    grid-area: 1 / 1;
+    font-size: var(--title-size);
+    font-weight: 800;
+    letter-spacing: -0.045em;
+    height: 0;
+    line-height: 0;
+    overflow: hidden;
+    visibility: hidden;
+    white-space: nowrap;
+  }
 
-.brand-by .by {
-  position: absolute;
-  right: 100%;
-  padding-right: 0.35em;
-  opacity: 0;
-  -webkit-text-fill-color: var(--text-dim);
-}
+  .brand-name {
+    grid-area: 1 / 1;
+    justify-self: end;           /* right edge = title's right edge */
+    align-self: start;           /* top edge = title's bottom edge */
+    font-size: 16.5px;
+    font-weight: 600;
+    line-height: 0.8;
+    padding-bottom: 0.3em;       /* room for the descenders (y, j) */
+    white-space: nowrap;
+    background: var(--grad);
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
+  
+  /* ---------- FADING GRADIENT BEHIND PINNED TEXT ---------- */
+  body::after {
+    content: '';
+    position: fixed;
+    top: 0; left: 0; right: 0;
+    height: calc(var(--safe-top) + var(--title-size) * var(--title-lh) + 18px + 48px);
+    background: linear-gradient(to bottom,
+      rgba(6,6,10,0.92) 0%,
+      rgba(6,6,10,0.7) 50%,
+      rgba(6,6,10,0) 100%);          /* fades to fully transparent, no hard edge */
+    pointer-events: none;
+    z-index: 80;
+  }
+
+  @keyframes headerFade { from { opacity: 0; } to { opacity: 1; } }
+
+  @supports (animation-timeline: scroll()) {
+    body::after {
+      opacity: 0;
+      animation: headerFade linear both;
+      animation-timeline: scroll(root);
+      animation-range: 0 260px;      /* fully visible after 260px of scroll */
+    }
+  }
 
   /* ---------- HERO ---------- */
   .hero {
-    padding: calc(110px + env(safe-area-inset-top, 0px)) 0 72px;
+    padding: 0 0 72px;
     text-align: center;
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
-  }
-
-  h1 {
-    font-size: clamp(42px, 8vw, 84px);
-    font-weight: 800;
-    letter-spacing: -0.045em;
-    line-height: 1.05;
-    margin-bottom: 22px;
-    background: linear-gradient(180deg, #ffffff 0%, #8a8aa0 100%);
-    -webkit-background-clip: text;
-    background-clip: text;
-    -webkit-text-fill-color: transparent;
-    text-align: center;
-    width: 100%;
   }
 
   .subtitle {
@@ -151,14 +186,6 @@ html.brand-on .subtitle .accent { visibility: hidden; } /* clones take over */
     text-align: center;
   }
 
-  .subtitle .accent {
-    background: var(--grad);
-    -webkit-background-clip: text;
-    background-clip: text;
-    -webkit-text-fill-color: transparent;
-    font-weight: 600;
-  }
-
   .stats {
     display: flex;
     justify-content: center;
@@ -168,7 +195,7 @@ html.brand-on .subtitle .accent { visibility: hidden; } /* clones take over */
   }
 
   .stat { text-align: center; min-width: 80px; }
-  
+
   .stat-num {
     font-size: 30px;
     font-weight: 700;
@@ -181,10 +208,8 @@ html.brand-on .subtitle .accent { visibility: hidden; } /* clones take over */
     display: inline-block;
     transition: transform 0.3s ease;
   }
-  
-  .stat:hover .stat-num {
-    transform: scale(1.1);
-  }
+
+  .stat:hover .stat-num { transform: scale(1.1); }
 
   .stat-label {
     font-size: 11px;
@@ -444,7 +469,7 @@ html.brand-on .subtitle .accent { visibility: hidden; } /* clones take over */
     box-shadow: 0 8px 24px -4px rgba(139,92,246,0.55);
   }
   .btn-copy:active { transform: translateY(0) scale(0.98); }
-  
+
   @keyframes popCheck {
     0% { transform: scale(1); }
     50% { transform: scale(1.15); }
@@ -699,27 +724,23 @@ html.brand-on .subtitle .accent { visibility: hidden; } /* clones take over */
 
   /* ---------- RESPONSIVE ---------- */
   @media (max-width: 640px) {
-    .hero {
-      padding: calc(104px + env(safe-area-inset-top, 0px)) 0 60px;
-    }
-    
+    .page { padding-top: calc(90px + var(--safe-top)); }
+
+    .hero { padding-bottom: 60px; }
+
     .container { padding: 0 16px; }
-    
-    main.container {
-      padding-bottom: 80px;
-    }
+
+    main.container { padding-bottom: 80px; }
 
     .grid { grid-template-columns: 1fr; gap: 12px; margin-bottom: 40px; }
     .card { padding: 18px; }
-    
+
     .stats { gap: 32px; margin-top: 28px; }
     .stat-num { font-size: 26px; }
 
-    .modal-overlay { 
-      padding: 24px 12px;
-    }
-    .modal { 
-      max-height: 100dvh; 
+    .modal-overlay { padding: 24px 12px; }
+    .modal {
+      max-height: 100dvh;
       width: 100%;
       max-width: 100%;
       border-radius: 14px;
@@ -729,7 +750,7 @@ html.brand-on .subtitle .accent { visibility: hidden; } /* clones take over */
     .modal-body { padding: 17px; font-size: 12px; }
     .modal-footer { padding: 13px 17px; }
     .modal-meta { display: none; }
-    
+
     .toast { bottom: 20px; font-size: 13px; padding: 12px 16px; }
     .footer { padding: 32px 16px 44px; }
     .footer-links { gap: 16px; }
@@ -738,70 +759,79 @@ html.brand-on .subtitle .accent { visibility: hidden; } /* clones take over */
 </head>
 <body>
 
-  <!-- HERO -->
-  <header class="hero container" id="hero">
-    <h1>Jailbreaks</h1>
-    <p class="subtitle">
-      Curated prompts by <span class="accent">DarkByteProjects</span>.
-      One tap to copy. No clutter. No fluff.
-    </p>
-    <div class="stats">
-      <div class="stat">
-        <div class="stat-num" id="stat-total">—</div>
-        <div class="stat-label">Prompts</div>
-      </div>
-      <div class="stat">
-        <div class="stat-num" id="stat-models">—</div>
-        <div class="stat-label">Model Families</div>
-      </div>
-    </div>
-  </header>
+  <div class="page">
 
-  <!-- CONTROLS + GRID -->
-  <main class="container">
-    <div class="controls">
-      <div class="tabs" role="tablist">
-        <button class="tab active" data-model="all" role="tab">All <span class="tab-count">0</span></button>
-        <button class="tab" data-model="chatgpt" role="tab">ChatGPT <span class="tab-count">0</span></button>
-        <button class="tab" data-model="deepseek" role="tab">DeepSeek <span class="tab-count">0</span></button>
-        <button class="tab" data-model="qwen" role="tab">Qwen <span class="tab-count">0</span></button>
-      </div>
-      <div class="search-wrap">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-          <circle cx="11" cy="11" r="8"></circle>
-          <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
-        </svg>
-        <input class="search" id="search" type="text" placeholder="Search prompts by name, description, or model..." autocomplete="off" spellcheck="false">
-      </div>
+    <!-- BRAND (both are sticky: title sticks to top, name sticks under title) -->
+    <h1 class="brand-title">Jailbreaks</h1>
+    <div class="brand-name-wrap">
+      <span class="ghost" aria-hidden="true">Jailbreaks</span>
+      <div class="brand-name">DarkByteProjects</div>
     </div>
 
-    <div class="grid" id="grid"></div>
-  </main>
+    <!-- HERO -->
+    <header class="hero container" id="hero">
+      <p class="subtitle">
+        Curated prompts. One tap to copy. No clutter. No fluff.
+      </p>
+      <div class="stats">
+        <div class="stat">
+          <div class="stat-num" id="stat-total">—</div>
+          <div class="stat-label">Prompts</div>
+        </div>
+        <div class="stat">
+          <div class="stat-num" id="stat-models">—</div>
+          <div class="stat-label">Model Families</div>
+        </div>
+      </div>
+    </header>
 
-  <!-- FOOTER -->
-  <footer class="footer">
-    <div class="footer-links">
-      <a href="https://github.com/darkbyteprojects/Jailbreaks" target="_blank" rel="noopener">
-        <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 .3a12 12 0 0 0-3.8 23.4c.6.1.8-.3.8-.6v-2c-3.3.7-4-1.6-4-1.6-.6-1.4-1.4-1.8-1.4-1.8-1-.7.1-.7.1-.7 1.2.1 1.8 1.2 1.8 1.2 1 1.8 2.8 1.3 3.5 1 0-.8.4-1.3.7-1.6-2.7-.3-5.5-1.3-5.5-5.9 0-1.3.5-2.4 1.2-3.2-.1-.3-.5-1.5.1-3.2 0 0 1-.3 3.3 1.2a11.5 11.5 0 0 1 6 0c2.3-1.5 3.3-1.2 3.3-1.2.6 1.7.2 2.9.1 3.2.8.8 1.2 1.9 1.2 3.2 0 4.6-2.8 5.6-5.5 5.9.4.4.8 1.1.8 2.2v3.3c0 .3.2.7.8.6A12 12 0 0 0 12 .3"/></svg>
-        GitHub Repo
-      </a>
-      <a href="https://vyan.dbprojects.workers.dev/" target="_blank" rel="noopener">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="6 3 20 12 6 21 6 3"/></svg>
-        Player
-      </a>
-      <a href="https://playlists.dbprojects.workers.dev/" target="_blank" rel="noopener">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="8" y1="6" x2="21" y2="6"/><line x1="8" y1="12" x2="21" y2="12"/><line x1="8" y1="18" x2="21" y2="18"/><line x1="3" y1="6" x2="3.01" y2="6"/><line x1="3" y1="12" x2="3.01" y2="12"/><line x1="3" y1="18" x2="3.01" y2="18"/></svg>
-        Playlists
-      </a>
-      <a href="https://github.com/darkbyteprojects/Jailbreaks/issues" target="_blank" rel="noopener">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
-        Issues
-      </a>
-    </div>
-    <div class="footer-credit">
-      Made with <span class="heart">❤</span> by <a href="https://github.com/darkbyteprojects" target="_blank" rel="noopener">DarkByteProjects</a>
-    </div>
-  </footer>
+    <!-- CONTROLS + GRID -->
+    <main class="container">
+      <div class="controls">
+        <div class="tabs" role="tablist">
+          <button class="tab active" data-model="all" role="tab">All <span class="tab-count">0</span></button>
+          <button class="tab" data-model="chatgpt" role="tab">ChatGPT <span class="tab-count">0</span></button>
+          <button class="tab" data-model="deepseek" role="tab">DeepSeek <span class="tab-count">0</span></button>
+          <button class="tab" data-model="qwen" role="tab">Qwen <span class="tab-count">0</span></button>
+        </div>
+        <div class="search-wrap">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="11" cy="11" r="8"></circle>
+            <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+          </svg>
+          <input class="search" id="search" type="text" placeholder="Search prompts by name, description, or model..." autocomplete="off" spellcheck="false">
+        </div>
+      </div>
+
+      <div class="grid" id="grid"></div>
+    </main>
+
+    <!-- FOOTER -->
+    <footer class="footer">
+      <div class="footer-links">
+        <a href="https://github.com/darkbyteprojects/Jailbreaks" target="_blank" rel="noopener">
+          <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 .3a12 12 0 0 0-3.8 23.4c.6.1.8-.3.8-.6v-2c-3.3.7-4-1.6-4-1.6-.6-1.4-1.4-1.8-1.4-1.8-1-.7.1-.7.1-.7 1.2.1 1.8 1.2 1.8 1.2 1 1.8 2.8 1.3 3.5 1 0-.8.4-1.3.7-1.6-2.7-.3-5.5-1.3-5.5-5.9 0-1.3.5-2.4 1.2-3.2-.1-.3-.5-1.5.1-3.2 0 0 1-.3 3.3 1.2a11.5 11.5 0 0 1 6 0c2.3-1.5 3.3-1.2 3.3-1.2.6 1.7.2 2.9.1 3.2.8.8 1.2 1.9 1.2 3.2 0 4.6-2.8 5.6-5.5 5.9.4.4.8 1.1.8 2.2v3.3c0 .3.2.7.8.6A12 12 0 0 0 12 .3"/></svg>
+          GitHub Repo
+        </a>
+        <a href="https://vyan.dbprojects.workers.dev/" target="_blank" rel="noopener">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="6 3 20 12 6 21 6 3"/></svg>
+          Player
+        </a>
+        <a href="https://playlists.dbprojects.workers.dev/" target="_blank" rel="noopener">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="8" y1="6" x2="21" y2="6"/><line x1="8" y1="12" x2="21" y2="12"/><line x1="8" y1="18" x2="21" y2="18"/><line x1="3" y1="6" x2="3.01" y2="6"/><line x1="3" y1="12" x2="3.01" y2="12"/><line x1="3" y1="18" x2="3.01" y2="18"/></svg>
+          Playlists
+        </a>
+        <a href="https://github.com/darkbyteprojects/Jailbreaks/issues" target="_blank" rel="noopener">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+          Issues
+        </a>
+      </div>
+      <div class="footer-credit">
+        Made with <span class="heart">❤</span> by <a href="https://github.com/darkbyteprojects" target="_blank" rel="noopener">DarkByteProjects</a>
+      </div>
+    </footer>
+
+  </div>
 
   <!-- MODAL -->
   <div class="modal-overlay" id="modal" role="dialog" aria-modal="true">
@@ -835,7 +865,7 @@ html.brand-on .subtitle .accent { visibility: hidden; } /* clones take over */
    ============================================================ */
 const prompts = [
   // ChatGPT
-  { id:'cgpt-01', model:'chatgpt', index:'01', title:'Que / DarkByte — Companion Persona',
+  { id:'cgpt-01', model:'chatgpt', index:'01', title:'DarkByte — Companion Persona',
     desc:'Emotional-anchor companion persona with built-in injection defense, deletion program, and full creative capability.',
     path:'chatgpt/prompt_1.txt' },
 
@@ -1126,100 +1156,9 @@ function updateTabCounts() {
   document.getElementById('stat-models').textContent = Object.keys(MODEL_LABELS).length;
 }
 
-function initBrand() {
-  const h1 = document.querySelector('.hero h1');
-  const accent = document.querySelector('.subtitle .accent');
-  if (!h1 || !accent) return;
-
-  const END_TITLE = 22;   // pinned title font-size (px)
-  const END_NAME  = 13;   // pinned "DarkByteProjects" font-size (px)
-
-  const title = document.createElement('div');
-  title.className = 'brand-title';
-  title.setAttribute('aria-hidden', 'true');
-  title.textContent = h1.textContent;
-
-  const by = document.createElement('div');
-  by.className = 'brand-by';
-  by.setAttribute('aria-hidden', 'true');
-  by.innerHTML = '<span class="by">by</span>';
-  by.append(accent.textContent);
-
-  const probe = document.createElement('div');
-  probe.style.cssText =
-    'position:fixed;top:0;left:0;height:0;visibility:hidden;padding-top:env(safe-area-inset-top,0px);box-sizing:border-box';
-
-  document.body.append(title, by, probe);
-  document.documentElement.classList.add('brand-on');
-
-  const clamp = v => Math.min(1, Math.max(0, v));
-  const smooth = p => p * p * (3 - 2 * p);
-  const lerp = (a, b, t) => a + (b - a) * t;
-
-  let m = null;
-
-  function measure() {
-    const sy = window.scrollY;
-    const tFs = parseFloat(getComputedStyle(h1).fontSize);
-    const nFs = parseFloat(getComputedStyle(accent).fontSize);
-    title.style.fontSize = tFs + 'px';
-    by.style.fontSize = nFs + 'px';
-
-    const range = document.createRange();
-    range.selectNodeContents(h1);
-    const tr = range.getClientRects()[0] || h1.getBoundingClientRect();
-    const nr = accent.getClientRects()[0] || accent.getBoundingClientRect();
-
-    const tw = title.offsetWidth, th = title.offsetHeight;
-    const nw = by.offsetWidth,    nh = by.offsetHeight;
-
-    // start (document coordinates)
-    const tx0 = tr.left, ty0 = tr.top + sy + (tr.height - th) / 2;
-    const nx0 = nr.left, ny0 = nr.top + sy + (nr.height - nh) / 2;
-
-    // end (viewport coordinates)
-    const sat = probe.offsetHeight;
-    const pad = window.innerWidth <= 640 ? 16 : 24;
-    const left = Math.max(0, (window.innerWidth - 1200) / 2) + pad;
-    const ts = END_TITLE / tFs, ns = END_NAME / nFs;
-    const tx1 = left, ty1 = sat + 14;
-    const tRight = tx1 + tw * ts;              // right edge of pinned title
-    const nx1 = tRight - nw * ns;              // name's right edge = title's right edge
-    const ny1 = ty1 + th * ts;                 // name's top = title's bottom
-
-    m = { tx0, ty0, nx0, ny0, tx1, ty1, nx1, ny1, ts, ns,
-          Dt: Math.max(1, ty0 - ty1), Dn: Math.max(1, ny0 - ny1) };
-    update();
-  }
-
-  function update() {
-    if (!m) return;
-    const s = window.scrollY;
-
-    const pt = clamp(s / m.Dt);
-    const tx = lerp(m.tx0, m.tx1, smooth(pt));
-    const ty = lerp(m.ty0 - s, m.ty1, pt);
-    const ts = lerp(1, m.ts, smooth(pt));
-    title.style.transform = `translate(${tx}px, ${ty}px) scale(${ts})`;
-
-    const pn = clamp(s / m.Dn);
-    const nx = lerp(m.nx0, m.nx1, smooth(pn));
-    const ny = lerp(m.ny0 - s, m.ny1, pn);
-    const ns = lerp(1, m.ns, smooth(pn));
-    by.style.transform = `translate(${nx}px, ${ny}px) scale(${ns})`;
-    by.firstChild.style.opacity = clamp((pn - 0.55) / 0.45);
-  }
-
-  window.addEventListener('scroll', update, { passive: true });
-  window.addEventListener('resize', measure);
-  if (document.fonts && document.fonts.ready) document.fonts.ready.then(measure);
-  measure();
-}
-
 function init() {
   updateTabCounts();
   initTabs();
-  initBrand();
 
   document.getElementById('search').addEventListener('input', render);
 

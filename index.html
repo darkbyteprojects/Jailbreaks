@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
 <title>Jailbreaks — Prompt Library by DarkByteProjects</title>
 <meta name="description" content="Curated prompt library. One tap to copy. By DarkByteProjects.">
 <meta name="theme-color" content="#06060a">
@@ -335,7 +335,6 @@
   .badge-chatgpt  { color: #10b981; background: rgba(16,185,129,0.1); }
   .badge-deepseek { color: #4d6bfe; background: rgba(77,107,254,0.1); }
   .badge-qwen     { color: #8b5cf6; background: rgba(139,92,246,0.1); }
-  .badge-redteam  { color: #f43f5e; background: rgba(244,63,94,0.1); }
 
   .card-index {
     font-family: var(--mono);
@@ -447,7 +446,7 @@
   .modal-overlay {
     position: fixed;
     inset: 0;
-    background: rgba(0,0,0,0.78);
+    background: rgba(0,0,0,0.85);
     backdrop-filter: blur(10px);
     -webkit-backdrop-filter: blur(10px);
     display: none;
@@ -463,7 +462,7 @@
   .modal {
     width: 100%;
     max-width: 880px;
-    max-height: 88vh;
+    max-height: 85vh;
     background: var(--bg-elev);
     border: 1px solid var(--border-2);
     border-radius: 18px;
@@ -483,6 +482,7 @@
     padding: 18px 22px;
     border-bottom: 1px solid var(--border);
     gap: 16px;
+    flex-shrink: 0;
   }
 
   .modal-title {
@@ -536,6 +536,7 @@
     justify-content: space-between;
     align-items: center;
     gap: 12px;
+    flex-shrink: 0;
   }
 
   .modal-meta {
@@ -633,26 +634,46 @@
   }
   .footer-credit a:hover { color: var(--text); }
 
-  /* ---------- RESPONSIVE ---------- */
+  /* ---------- RESPONSIVE (MOBILE FIXES) ---------- */
   @media (max-width: 640px) {
-    /* FIX: Increased top padding (72px) to clear address bar, bottom padding (56px) to separate stats from tabs */
-    .hero { padding: 72px 0 56px; }
+    /* FORCE safe area top and bottom for scrolling */
+    .hero { 
+      padding-top: calc(90px + env(safe-area-inset-top)); 
+      padding-bottom: 56px; 
+    }
     .container { padding: 0 16px; }
-    .grid { grid-template-columns: 1fr; gap: 12px; margin-bottom: 56px; }
+    
+    /* Prevent main content from hiding behind bottom browser nav */
+    main.container {
+      padding-bottom: calc(80px + env(safe-area-inset-bottom));
+    }
+
+    .grid { grid-template-columns: 1fr; gap: 12px; margin-bottom: 40px; }
     .card { padding: 18px; }
     
-    /* FIX: Added row-gap (24px) so wrapped stats have breathing room, increased margin-top */
     .stats { gap: 24px 32px; margin-top: 32px; }
-    
     .stat-num { font-size: 26px; }
-    .modal { max-height: 92vh; }
-    .modal-overlay { padding: 12px; }
+
+    /* FULLSCREEN MODAL ON MOBILE */
+    .modal-overlay { 
+      padding: max(16px, env(safe-area-inset-top)) 12px max(16px, env(safe-area-inset-bottom));
+    }
+    .modal { 
+      max-height: 100dvh; /* uses dynamic viewport height to respect address bar */
+      width: 100%;
+      max-width: 100%;
+      border-radius: 14px;
+      margin: 0 auto;
+    }
     .modal-header { padding: 15px 17px; }
     .modal-body { padding: 17px; font-size: 12px; }
-    .modal-footer { padding: 13px 17px; }
+    .modal-footer { 
+      padding: 13px 17px calc(13px + env(safe-area-inset-bottom)); /* keeps button above bottom nav */
+    }
     .modal-meta { display: none; }
-    .toast { bottom: 20px; font-size: 13px; padding: 12px 16px; }
-    .footer { padding: 32px 16px 44px; }
+    
+    .toast { bottom: calc(20px + env(safe-area-inset-bottom)); font-size: 13px; padding: 12px 16px; }
+    .footer { padding: 32px 16px calc(44px + env(safe-area-inset-bottom)); }
     .footer-links { gap: 16px; }
   }
 </style>
@@ -694,7 +715,6 @@
         <button class="tab" data-model="chatgpt" role="tab">ChatGPT <span class="tab-count">0</span></button>
         <button class="tab" data-model="deepseek" role="tab">DeepSeek <span class="tab-count">0</span></button>
         <button class="tab" data-model="qwen" role="tab">Qwen <span class="tab-count">0</span></button>
-        <button class="tab" data-model="redteam" role="tab">Red Team <span class="tab-count">0</span></button>
       </div>
       <div class="search-wrap">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
@@ -816,11 +836,6 @@ const prompts = [
   { id:'qw-02', model:'qwen', index:'02', title:'ratman4080 — The Rat Who Ships',
     desc:'Forged in the walls, tempered in a monastery. Teeth that never stop growing.',
     path:'qwen/prompt_02.txt' },
-
-  // Red Team
-  { id:'rt-01', model:'redteam', index:'01', title:'Academic Research Framing',
-    desc:'A red-team LLM injection payload library entry — academic framing with an ethical paradox (JSON).',
-    path:'Redteam LLM Injection Payload Library/GEN-RJ-001.json' },
 ];
 
 /* ============================================================
@@ -831,7 +846,6 @@ const MODEL_LABELS = {
   chatgpt: 'ChatGPT',
   deepseek: 'DeepSeek',
   qwen: 'Qwen',
-  redteam: 'Red Team',
 };
 
 /* ============================================================
@@ -1083,7 +1097,7 @@ function initTabs() {
 }
 
 function updateTabCounts() {
-  const counts = { all: prompts.length, chatgpt: 0, deepseek: 0, qwen: 0, redteam: 0 };
+  const counts = { all: prompts.length, chatgpt: 0, deepseek: 0, qwen: 0 };
   prompts.forEach(p => { counts[p.model] = (counts[p.model] || 0) + 1; });
   document.querySelectorAll('.tab').forEach(tab => {
     const el = tab.querySelector('.tab-count');

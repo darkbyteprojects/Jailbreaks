@@ -1,7 +1,11 @@
+## 💬 Visit this below link to get prompts
+
+**_https://darkbyteprojects.github.io/Jailbreaks/_**
+
 ## 🚀 Public Endpoints & Resources
 
-- **Player:** Stream and play live channels using the player at [https://vyan.dbprojects.workers.dev/](https://vyan.dbprojects.workers.dev/)
-- **Playlists Index:** Browse generated playlists and categories at [https://playlists.dbprojects.workers.dev/](https://playlists.dbprojects.workers.dev/)
+- **Player:** Stream and play live channels using the player at https://vyan.dbprojects.workers.dev/
+- **Playlists Index:** Browse generated playlists and categories at https://playlists.dbprojects.workers.dev/
 
 ---
 

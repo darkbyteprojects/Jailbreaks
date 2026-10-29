@@ -755,6 +755,62 @@
     .footer { padding: 32px 16px 44px; }
     .footer-links { gap: 16px; }
   }
+
+  /* ---- spacing fix ---- */
+  .hero.container { padding-bottom: 72px; }
+  @media (max-width: 640px) { .hero.container { padding-bottom: 64px; } }
+
+  /* ---- toast: top, one line, slides down ---- */
+  .toast {
+    top: calc(var(--safe-top) + 96px);
+    bottom: auto;
+    white-space: nowrap;
+    transform: translateX(-50%) translateY(-16px) scale(0.96);
+  }
+  .toast.show { transform: translateX(-50%) translateY(0) scale(1); }
+
+  /* ---- entrance animations ---- */
+  @keyframes titleIn {
+    from { opacity: 0; transform: translateY(18px) scale(0.97); }
+    to   { opacity: 1; transform: none; }
+  }
+  .brand-title { animation: titleIn 0.9s cubic-bezier(0.16, 1, 0.3, 1) both; }
+  .brand-name-wrap { animation: titleIn 0.9s 0.15s cubic-bezier(0.16, 1, 0.3, 1) both; }
+  .subtitle { animation: fadeUp 0.8s 0.3s cubic-bezier(0.16, 1, 0.3, 1) both; }
+  .stats    { animation: fadeUp 0.8s 0.45s cubic-bezier(0.16, 1, 0.3, 1) both; }
+  .controls { animation: fadeUp 0.8s 0.6s cubic-bezier(0.16, 1, 0.3, 1) both; }
+
+  /* ---- cards: scroll-reveal (replaces the old per-card animation) ---- */
+  .card {
+    animation: none;
+    opacity: 0;
+    transform: translateY(28px) scale(0.98);
+    transition: opacity 0.6s ease,
+                transform 0.7s cubic-bezier(0.16, 1, 0.3, 1),
+                border-color 0.3s, background 0.3s, box-shadow 0.3s;
+  }
+  .card.in { opacity: 1; transform: none; }
+  .card.in:hover { transform: translateY(-5px) scale(1.01); }
+
+  /* ---- smoother interactions ---- */
+  .tab:active { transform: scale(0.95); }
+  .btn { transition: transform 0.25s cubic-bezier(0.34, 1.56, 0.64, 1),
+                    box-shadow 0.25s, background 0.25s, border-color 0.25s; }
+  .btn-copy.copied { animation: popCheck 0.45s cubic-bezier(0.34, 1.56, 0.64, 1); }
+  .badge::before { animation: pulseDot 2.4s ease-in-out infinite; }
+  @keyframes pulseDot { 0%,100% { opacity: 1; } 50% { opacity: 0.45; } }
+  .modal-overlay { transition: opacity 0.35s ease; }
+  .search { transition: all 0.35s cubic-bezier(0.16, 1, 0.3, 1); }
+
+  @media (prefers-reduced-motion: reduce) {
+    *, *::before, *::after {
+      animation-duration: 0.01ms !important;
+      animation-delay: 0s !important;
+      transition-duration: 0.01ms !important;
+    }
+    html { scroll-behavior: auto; }
+  }
+
 </style>
 </head>
 <body>
@@ -1046,9 +1102,7 @@ function render() {
 
   grid.innerHTML = filtered.map(cardHTML).join('');
 
-  grid.querySelectorAll('.card').forEach((card, i) => {
-    card.style.animationDelay = Math.min(i * 30, 400) + 'ms';
-  });
+  observeCards();
 
   grid.querySelectorAll('.btn-copy').forEach(btn => {
     btn.addEventListener('click', handleCardCopy);
@@ -1152,8 +1206,37 @@ function updateTabCounts() {
     const el = tab.querySelector('.tab-count');
     if (el) el.textContent = counts[tab.dataset.model] || 0;
   });
-  document.getElementById('stat-total').textContent = prompts.length;
-  document.getElementById('stat-models').textContent = Object.keys(MODEL_LABELS).length;
+  countUp(document.getElementById('stat-total'), prompts.length);
+  countUp(document.getElementById('stat-models'), Object.keys(MODEL_LABELS).length, 700);
+}
+
+let cardObserver = null;
+
+function observeCards() {
+  if (cardObserver) cardObserver.disconnect();
+  const cards = document.querySelectorAll('.card');
+  if (!('IntersectionObserver' in window)) {
+    cards.forEach(c => c.classList.add('in'));
+    return;
+  }
+  cardObserver = new IntersectionObserver(entries => {
+    const visible = entries.filter(e => e.isIntersecting);
+    visible.forEach((e, i) => {
+      cardObserver.unobserve(e.target);
+      setTimeout(() => e.target.classList.add('in'), i * 70); // staggered
+    });
+  }, { threshold: 0.08, rootMargin: '0px 0px -40px 0px' });
+  cards.forEach(c => cardObserver.observe(c));
+}
+
+function countUp(el, to, duration = 900) {
+  const start = performance.now();
+  (function tick(now) {
+    const p = Math.min(1, (now - start) / duration);
+    const eased = 1 - Math.pow(1 - p, 3);
+    el.textContent = Math.round(to * eased);
+    if (p < 1) requestAnimationFrame(tick);
+  })(start);
 }
 
 function init() {

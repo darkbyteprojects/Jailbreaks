@@ -1,15 +1,17 @@
-## 💬 Visit this below link to get prompts
+### 💬 Visit this below link to get prompts
 
 **_https://darkbyteprojects.github.io/Jailbreaks/_**
 
-## 🚀 Public Endpoints & Resources
+---
+
+### 🚀 Public Endpoints & Resources
 
 - **Player:** Stream and play live channels using the player at https://vyan.dbprojects.workers.dev/
 - **Playlists Index:** Browse generated playlists and categories at https://playlists.dbprojects.workers.dev/
 
 ---
 
-## 🌟 Support & Feedback
+### 🌟 Support & Feedback
 
 - **Give a Star:** If you find this repository useful, please leave a **⭐ Star** to support the project and keep it alive!
 - **Report Issues:** If you have any issue, open an issue under the [Issues](../../issues) tab.

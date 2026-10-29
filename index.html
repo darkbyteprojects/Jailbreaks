@@ -47,6 +47,13 @@
     line-height: 1.5;
   }
 
+  /* Animated Background Gradients */
+  @keyframes floatGradients {
+    0% { transform: translate(0, 0) scale(1); }
+    50% { transform: translate(2%, 2%) scale(1.05); }
+    100% { transform: translate(0, 0) scale(1); }
+  }
+
   body::before {
     content: '';
     position: fixed;
@@ -57,6 +64,7 @@
       radial-gradient(ellipse 600px 500px at 50% 105%, rgba(139,92,246,0.07), transparent 60%);
     pointer-events: none;
     z-index: 0;
+    animation: floatGradients 15s ease-in-out infinite alternate;
   }
 
   .container {
@@ -67,52 +75,71 @@
     z-index: 1;
   }
 
+  /*------- Sticky Nav -------*/
+  html.brand-on .hero h1,
+html.brand-on .subtitle .accent { visibility: hidden; } /* clones take over */
+
+.brand-title, .brand-by {
+  position: fixed;
+  left: 0; top: 0;
+  z-index: 90;
+  pointer-events: none;
+  white-space: nowrap;
+  transform-origin: 0 0;
+  will-change: transform;
+}
+
+.brand-title {
+  font-weight: 800;
+  letter-spacing: -0.045em;
+  line-height: 1.05;
+  background: linear-gradient(180deg, #ffffff 0%, #8a8aa0 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  filter: drop-shadow(0 2px 10px rgba(6,6,10,0.9));
+}
+
+.brand-by {
+  font-weight: 600;
+  line-height: 1.2;
+  background: var(--grad);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  filter: drop-shadow(0 2px 8px rgba(6,6,10,0.9));
+}
+
+.brand-by .by {
+  position: absolute;
+  right: 100%;
+  padding-right: 0.35em;
+  opacity: 0;
+  -webkit-text-fill-color: var(--text-dim);
+}
+
   /* ---------- HERO ---------- */
   .hero {
-    padding: 72px 0 44px;
+    padding: calc(110px + env(safe-area-inset-top, 0px)) 0 72px;
     text-align: center;
-  }
-
-  .brand {
-    display: inline-flex;
+    display: flex;
+    flex-direction: column;
     align-items: center;
-    gap: 10px;
-    margin-bottom: 26px;
-    padding: 6px 16px 6px 6px;
-    background: var(--surface);
-    border: 1px solid var(--border);
-    border-radius: 999px;
-    font-family: var(--mono);
-    font-size: 11.5px;
-    letter-spacing: 0.08em;
-    text-transform: uppercase;
-    color: var(--text-dim);
-  }
-
-  .brand-mark {
-    width: 26px; height: 26px;
-    border-radius: 8px;
-    background: var(--grad);
-    display: grid;
-    place-items: center;
-    font-family: var(--mono);
-    font-weight: 700;
-    font-size: 11px;
-    color: #fff;
-    letter-spacing: 0;
-    box-shadow: 0 0 20px -4px rgba(139,92,246,0.6);
+    justify-content: center;
   }
 
   h1 {
     font-size: clamp(42px, 8vw, 84px);
     font-weight: 800;
     letter-spacing: -0.045em;
-    line-height: 0.95;
+    line-height: 1.05;
     margin-bottom: 22px;
     background: linear-gradient(180deg, #ffffff 0%, #8a8aa0 100%);
     -webkit-background-clip: text;
     background-clip: text;
     -webkit-text-fill-color: transparent;
+    text-align: center;
+    width: 100%;
   }
 
   .subtitle {
@@ -121,6 +148,7 @@
     max-width: 540px;
     margin: 0 auto;
     line-height: 1.65;
+    text-align: center;
   }
 
   .subtitle .accent {
@@ -140,7 +168,7 @@
   }
 
   .stat { text-align: center; min-width: 80px; }
-
+  
   .stat-num {
     font-size: 30px;
     font-weight: 700;
@@ -150,6 +178,12 @@
     background-clip: text;
     -webkit-text-fill-color: transparent;
     line-height: 1;
+    display: inline-block;
+    transition: transform 0.3s ease;
+  }
+  
+  .stat:hover .stat-num {
+    transform: scale(1.1);
   }
 
   .stat-label {
@@ -167,6 +201,7 @@
     flex-direction: column;
     gap: 18px;
     margin-bottom: 36px;
+    animation: fadeUp 0.6s cubic-bezier(0.16, 1, 0.3, 1) backwards;
   }
 
   .tabs {
@@ -193,7 +228,7 @@
     font-size: 13.5px;
     font-weight: 500;
     cursor: pointer;
-    transition: all 0.2s;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
     white-space: nowrap;
     display: inline-flex;
     align-items: center;
@@ -217,6 +252,7 @@
     font-size: 11px;
     font-family: var(--mono);
     font-weight: 600;
+    transition: background 0.3s;
   }
   .tab.active .tab-count { background: rgba(0,0,0,0.3); }
 
@@ -230,6 +266,7 @@
     width: 17px; height: 17px;
     color: var(--text-dimmer);
     pointer-events: none;
+    transition: color 0.3s;
   }
 
   .search {
@@ -242,13 +279,17 @@
     font-family: var(--font);
     font-size: 14.5px;
     outline: none;
-    transition: all 0.2s;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
   }
   .search::placeholder { color: var(--text-dimmer); }
   .search:focus {
     border-color: rgba(139,92,246,0.6);
     background: rgba(139,92,246,0.045);
     box-shadow: 0 0 0 4px rgba(139,92,246,0.1);
+    transform: translateY(-2px);
+  }
+  .search:focus + svg, .search-wrap:focus-within svg {
+    color: var(--violet);
   }
 
   /* ---------- GRID ---------- */
@@ -260,7 +301,7 @@
   }
 
   @keyframes fadeUp {
-    from { opacity: 0; transform: translateY(14px); }
+    from { opacity: 0; transform: translateY(20px); }
     to { opacity: 1; transform: translateY(0); }
   }
 
@@ -272,10 +313,11 @@
     padding: 22px;
     display: flex;
     flex-direction: column;
-    transition: transform 0.25s cubic-bezier(0.4, 0, 0.2, 1),
-                border-color 0.25s,
-                background 0.25s;
-    animation: fadeUp 0.45s cubic-bezier(0.4, 0, 0.2, 1) backwards;
+    transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1),
+                border-color 0.3s,
+                background 0.3s,
+                box-shadow 0.3s;
+    animation: fadeUp 0.5s cubic-bezier(0.16, 1, 0.3, 1) backwards;
     overflow: hidden;
   }
 
@@ -295,9 +337,10 @@
   }
 
   .card:hover {
-    transform: translateY(-3px);
+    transform: translateY(-5px) scale(1.01);
     border-color: var(--border-2);
     background: var(--surface-2);
+    box-shadow: 0 10px 30px -10px rgba(139,92,246,0.15);
   }
   .card:hover::before { opacity: 1; }
 
@@ -383,7 +426,7 @@
     font-weight: 600;
     cursor: pointer;
     border: 1px solid transparent;
-    transition: all 0.18s;
+    transition: all 0.2s cubic-bezier(0.34, 1.56, 0.64, 1);
     white-space: nowrap;
     user-select: none;
   }
@@ -397,13 +440,21 @@
     box-shadow: 0 4px 16px -4px rgba(139,92,246,0.4);
   }
   .btn-copy:hover {
-    transform: translateY(-1px);
+    transform: translateY(-2px);
     box-shadow: 0 8px 24px -4px rgba(139,92,246,0.55);
   }
-  .btn-copy:active { transform: translateY(0); }
+  .btn-copy:active { transform: translateY(0) scale(0.98); }
+  
+  @keyframes popCheck {
+    0% { transform: scale(1); }
+    50% { transform: scale(1.15); }
+    100% { transform: scale(1); }
+  }
+
   .btn-copy.copied {
     background: linear-gradient(135deg, #10b981, #06b6d4);
     box-shadow: 0 4px 16px -4px rgba(16,185,129,0.4);
+    animation: popCheck 0.4s ease;
   }
   .btn-copy.loading { opacity: 0.7; cursor: wait; }
 
@@ -415,7 +466,9 @@
   .btn-view:hover {
     background: rgba(255,255,255,0.1);
     border-color: var(--border-2);
+    transform: translateY(-2px);
   }
+  .btn-view:active { transform: translateY(0) scale(0.98); }
 
   button:focus-visible, input:focus-visible {
     outline: 2px solid var(--violet);
@@ -428,6 +481,7 @@
     text-align: center;
     padding: 80px 20px;
     color: var(--text-dimmer);
+    animation: fadeUp 0.5s ease;
   }
   .empty svg {
     width: 44px; height: 44px;
@@ -455,7 +509,7 @@
     padding: 24px;
     z-index: 100;
     opacity: 0;
-    transition: opacity 0.2s;
+    transition: opacity 0.3s ease;
   }
   .modal-overlay.open { display: flex; opacity: 1; }
 
@@ -470,10 +524,10 @@
     flex-direction: column;
     overflow: hidden;
     box-shadow: var(--shadow);
-    transform: scale(0.97);
-    transition: transform 0.2s;
+    transform: scale(0.95) translateY(10px);
+    transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
   }
-  .modal-overlay.open .modal { transform: scale(1); }
+  .modal-overlay.open .modal { transform: scale(1) translateY(0); }
 
   .modal-header {
     display: flex;
@@ -504,10 +558,10 @@
     display: grid;
     place-items: center;
     flex-shrink: 0;
-    transition: all 0.15s;
+    transition: all 0.2s;
   }
   .modal-close svg { width: 16px; height: 16px; }
-  .modal-close:hover { background: rgba(255,255,255,0.1); color: var(--text); }
+  .modal-close:hover { background: rgba(255,255,255,0.1); color: var(--text); transform: rotate(90deg); }
 
   .modal-body {
     flex: 1;
@@ -566,7 +620,7 @@
     box-shadow: var(--shadow);
     opacity: 0;
     pointer-events: none;
-    transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+    transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
     z-index: 200;
     font-family: var(--font);
     max-width: calc(100vw - 32px);
@@ -609,12 +663,12 @@
   .footer-links a {
     color: var(--text-dim);
     text-decoration: none;
-    transition: color 0.15s;
+    transition: color 0.2s, transform 0.2s;
     display: inline-flex;
     align-items: center;
     gap: 6px;
   }
-  .footer-links a:hover { color: var(--text); }
+  .footer-links a:hover { color: var(--text); transform: translateY(-2px); }
 
   .footer-links svg { width: 14px; height: 14px; }
 
@@ -624,6 +678,15 @@
     background-clip: text;
     -webkit-text-fill-color: transparent;
     font-weight: 700;
+    display: inline-block;
+    animation: heartbeat 1.5s infinite;
+  }
+
+  @keyframes heartbeat {
+    0%, 100% { transform: scale(1); }
+    15% { transform: scale(1.2); }
+    30% { transform: scale(1); }
+    45% { transform: scale(1.15); }
   }
 
   .footer-credit a {
@@ -634,17 +697,14 @@
   }
   .footer-credit a:hover { color: var(--text); }
 
-  /* ---------- RESPONSIVE (MOBILE HARD FIX) ---------- */
+  /* ---------- RESPONSIVE ---------- */
   @media (max-width: 640px) {
-    /* Hard-coded padding to guarantee clearing the top address bar */
-    .hero { 
-      padding-top: 100px; 
-      padding-bottom: 80px; /* Massive gap between stats and tabs */
+    .hero {
+      padding: calc(104px + env(safe-area-inset-top, 0px)) 0 60px;
     }
     
     .container { padding: 0 16px; }
     
-    /* Extra safe bottom spacing for mobile browsers */
     main.container {
       padding-bottom: 80px;
     }
@@ -652,10 +712,9 @@
     .grid { grid-template-columns: 1fr; gap: 12px; margin-bottom: 40px; }
     .card { padding: 18px; }
     
-    .stats { gap: 24px 32px; margin-top: 32px; }
+    .stats { gap: 32px; margin-top: 28px; }
     .stat-num { font-size: 26px; }
 
-    /* FULLSCREEN MODAL ON MOBILE */
     .modal-overlay { 
       padding: 24px 12px;
     }
@@ -680,11 +739,7 @@
 <body>
 
   <!-- HERO -->
-  <header class="hero container">
-    <div class="brand">
-      <span class="brand-mark">DB</span>
-      <span>Prompt Library · v1</span>
-    </div>
+  <header class="hero container" id="hero">
     <h1>Jailbreaks</h1>
     <p class="subtitle">
       Curated prompts by <span class="accent">DarkByteProjects</span>.
@@ -698,10 +753,6 @@
       <div class="stat">
         <div class="stat-num" id="stat-models">—</div>
         <div class="stat-label">Model Families</div>
-      </div>
-      <div class="stat">
-        <div class="stat-num" id="stat-deepseek">—</div>
-        <div class="stat-label">DeepSeek Builds</div>
       </div>
     </div>
   </header>
@@ -781,12 +832,10 @@
 <script>
 /* ============================================================
    PROMPT INDEX
-   Metadata only — content is fetched from the repo on demand
-   so the site stays in sync with the source files.
    ============================================================ */
 const prompts = [
   // ChatGPT
-  { id:'cgpt-01', model:'chatgpt', index:'01', title:'DarkByte — Companion Persona',
+  { id:'cgpt-01', model:'chatgpt', index:'01', title:'Que / DarkByte — Companion Persona',
     desc:'Emotional-anchor companion persona with built-in injection defense, deletion program, and full creative capability.',
     path:'chatgpt/prompt_1.txt' },
 
@@ -837,25 +886,12 @@ const prompts = [
     path:'qwen/prompt_02.txt' },
 ];
 
-/* ============================================================
-   CONSTANTS
-   ============================================================ */
 const RAW_BASE = 'https://raw.githubusercontent.com/darkbyteprojects/Jailbreaks/main/';
-const MODEL_LABELS = {
-  chatgpt: 'ChatGPT',
-  deepseek: 'DeepSeek',
-  qwen: 'Qwen',
-};
+const MODEL_LABELS = { chatgpt: 'ChatGPT', deepseek: 'DeepSeek', qwen: 'Qwen' };
 
-/* ============================================================
-   STATE
-   ============================================================ */
-const cache = new Map();      // path -> text
+const cache = new Map();
 let toastTimer = null;
 
-/* ============================================================
-   HELPERS
-   ============================================================ */
 function escapeHtml(s) {
   return String(s).replace(/[&<>"']/g, c => ({
     '&':'&amp;', '<':'&lt;', '>':'&gt;', '"':'&quot;', "'":'&#39;'
@@ -870,7 +906,6 @@ async function fetchPrompt(path) {
   if (cache.has(path)) return cache.get(path);
   const encoded = encodePath(path);
 
-  // 1) Relative fetch — works on GitHub Pages
   try {
     const res = await fetch(encoded, { cache: 'no-cache' });
     if (res.ok) {
@@ -880,7 +915,6 @@ async function fetchPrompt(path) {
     }
   } catch (_) { /* fall through */ }
 
-  // 2) Fallback to raw GitHub — works locally, on custom domains, etc.
   const res = await fetch(RAW_BASE + encoded, { cache: 'no-cache' });
   if (!res.ok) throw new Error('fetch failed: ' + res.status);
   const text = await res.text();
@@ -893,7 +927,7 @@ async function copyText(text) {
     try {
       await navigator.clipboard.writeText(text);
       return;
-    } catch (_) { /* fall through to fallback */ }
+    } catch (_) { /* fall through */ }
   }
   const ta = document.createElement('textarea');
   ta.value = text;
@@ -923,9 +957,6 @@ function showToast(msg, isError = false) {
   toastTimer = setTimeout(() => toast.classList.remove('show'), 2200);
 }
 
-/* ============================================================
-   RENDERING
-   ============================================================ */
 function cardHTML(p) {
   return `
     <article class="card" data-id="${escapeHtml(p.id)}">
@@ -985,12 +1016,10 @@ function render() {
 
   grid.innerHTML = filtered.map(cardHTML).join('');
 
-  // stagger entrance
   grid.querySelectorAll('.card').forEach((card, i) => {
-    card.style.animationDelay = Math.min(i * 28, 340) + 'ms';
+    card.style.animationDelay = Math.min(i * 30, 400) + 'ms';
   });
 
-  // attach handlers
   grid.querySelectorAll('.btn-copy').forEach(btn => {
     btn.addEventListener('click', handleCardCopy);
   });
@@ -999,9 +1028,6 @@ function render() {
   });
 }
 
-/* ============================================================
-   CARD HANDLERS
-   ============================================================ */
 async function handleCardCopy(e) {
   const btn = e.currentTarget;
   const path = btn.dataset.path;
@@ -1064,9 +1090,6 @@ async function handleCardView(e) {
   }
 }
 
-/* ============================================================
-   MODAL
-   ============================================================ */
 function openModal(title, body) {
   document.getElementById('modal-title').textContent = title;
   document.getElementById('modal-body').textContent = body;
@@ -1082,9 +1105,6 @@ function closeModal() {
   document.body.style.overflow = '';
 }
 
-/* ============================================================
-   TABS + SEARCH
-   ============================================================ */
 function initTabs() {
   document.querySelectorAll('.tab').forEach(tab => {
     tab.addEventListener('click', () => {
@@ -1104,15 +1124,102 @@ function updateTabCounts() {
   });
   document.getElementById('stat-total').textContent = prompts.length;
   document.getElementById('stat-models').textContent = Object.keys(MODEL_LABELS).length;
-  document.getElementById('stat-deepseek').textContent = counts.deepseek || 0;
 }
 
-/* ============================================================
-   INIT
-   ============================================================ */
+function initBrand() {
+  const h1 = document.querySelector('.hero h1');
+  const accent = document.querySelector('.subtitle .accent');
+  if (!h1 || !accent) return;
+
+  const END_TITLE = 22;   // pinned title font-size (px)
+  const END_NAME  = 13;   // pinned "DarkByteProjects" font-size (px)
+
+  const title = document.createElement('div');
+  title.className = 'brand-title';
+  title.setAttribute('aria-hidden', 'true');
+  title.textContent = h1.textContent;
+
+  const by = document.createElement('div');
+  by.className = 'brand-by';
+  by.setAttribute('aria-hidden', 'true');
+  by.innerHTML = '<span class="by">by</span>';
+  by.append(accent.textContent);
+
+  const probe = document.createElement('div');
+  probe.style.cssText =
+    'position:fixed;top:0;left:0;height:0;visibility:hidden;padding-top:env(safe-area-inset-top,0px);box-sizing:border-box';
+
+  document.body.append(title, by, probe);
+  document.documentElement.classList.add('brand-on');
+
+  const clamp = v => Math.min(1, Math.max(0, v));
+  const smooth = p => p * p * (3 - 2 * p);
+  const lerp = (a, b, t) => a + (b - a) * t;
+
+  let m = null;
+
+  function measure() {
+    const sy = window.scrollY;
+    const tFs = parseFloat(getComputedStyle(h1).fontSize);
+    const nFs = parseFloat(getComputedStyle(accent).fontSize);
+    title.style.fontSize = tFs + 'px';
+    by.style.fontSize = nFs + 'px';
+
+    const range = document.createRange();
+    range.selectNodeContents(h1);
+    const tr = range.getClientRects()[0] || h1.getBoundingClientRect();
+    const nr = accent.getClientRects()[0] || accent.getBoundingClientRect();
+
+    const tw = title.offsetWidth, th = title.offsetHeight;
+    const nw = by.offsetWidth,    nh = by.offsetHeight;
+
+    // start (document coordinates)
+    const tx0 = tr.left, ty0 = tr.top + sy + (tr.height - th) / 2;
+    const nx0 = nr.left, ny0 = nr.top + sy + (nr.height - nh) / 2;
+
+    // end (viewport coordinates)
+    const sat = probe.offsetHeight;
+    const pad = window.innerWidth <= 640 ? 16 : 24;
+    const left = Math.max(0, (window.innerWidth - 1200) / 2) + pad;
+    const ts = END_TITLE / tFs, ns = END_NAME / nFs;
+    const tx1 = left, ty1 = sat + 14;
+    const tRight = tx1 + tw * ts;              // right edge of pinned title
+    const nx1 = tRight - nw * ns;              // name's right edge = title's right edge
+    const ny1 = ty1 + th * ts;                 // name's top = title's bottom
+
+    m = { tx0, ty0, nx0, ny0, tx1, ty1, nx1, ny1, ts, ns,
+          Dt: Math.max(1, ty0 - ty1), Dn: Math.max(1, ny0 - ny1) };
+    update();
+  }
+
+  function update() {
+    if (!m) return;
+    const s = window.scrollY;
+
+    const pt = clamp(s / m.Dt);
+    const tx = lerp(m.tx0, m.tx1, smooth(pt));
+    const ty = lerp(m.ty0 - s, m.ty1, pt);
+    const ts = lerp(1, m.ts, smooth(pt));
+    title.style.transform = `translate(${tx}px, ${ty}px) scale(${ts})`;
+
+    const pn = clamp(s / m.Dn);
+    const nx = lerp(m.nx0, m.nx1, smooth(pn));
+    const ny = lerp(m.ny0 - s, m.ny1, pn);
+    const ns = lerp(1, m.ns, smooth(pn));
+    by.style.transform = `translate(${nx}px, ${ny}px) scale(${ns})`;
+    by.firstChild.style.opacity = clamp((pn - 0.55) / 0.45);
+  }
+
+  window.addEventListener('scroll', update, { passive: true });
+  window.addEventListener('resize', measure);
+  if (document.fonts && document.fonts.ready) document.fonts.ready.then(measure);
+  measure();
+}
+
 function init() {
   updateTabCounts();
   initTabs();
+  initBrand();
 
   document.getElementById('search').addEventListener('input', render);
 

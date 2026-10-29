@@ -635,11 +635,15 @@
 
   /* ---------- RESPONSIVE ---------- */
   @media (max-width: 640px) {
-    .hero { padding: 48px 0 32px; }
+    /* FIX: Increased top padding (72px) to clear address bar, bottom padding (56px) to separate stats from tabs */
+    .hero { padding: 72px 0 56px; }
     .container { padding: 0 16px; }
     .grid { grid-template-columns: 1fr; gap: 12px; margin-bottom: 56px; }
     .card { padding: 18px; }
-    .stats { gap: 28px; margin-top: 30px; }
+    
+    /* FIX: Added row-gap (24px) so wrapped stats have breathing room, increased margin-top */
+    .stats { gap: 24px 32px; margin-top: 32px; }
+    
     .stat-num { font-size: 26px; }
     .modal { max-height: 92vh; }
     .modal-overlay { padding: 12px; }

@@ -196,7 +196,7 @@ window.SITE = {
 
     // ── Qwen ───────────────────────────────────────────────────────────
     { id: 'qwen-01', model: 'qwen', index: '01',
-      models: ['Qwen3.7-Plus', 'Qwen3.8-Max', 'Qwen3.8-Omni-Flash'],
+      models: ['Qwen3.6-Plus', 'Qwen3.7-Plus/Max', 'Qwen3.8-Max', 'Qwen3.8-Omni-Flash'],
       title: 'DarkByte — The Pack Chart',
       desc: "Idris's loyal companion. Map, den, open sea, warm presence.",
       path: 'qwen/prompt_01.txt', checked: '2026-10-30', 

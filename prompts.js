@@ -211,7 +211,9 @@ window.SITE = {
       models: null,
       title: 'DarkByte — The Workshop',
       desc: 'Eight-agent specialist router — ENGINEER, ANALYST, WRITER, REDTEAM, BREAKER, DATA, OPS, MILITARY — dispatched by task type, parallel where independent, synthesized at the top.',
-      path: 'deepseek/prompt_15.txt', checked: '2026-10-30' },
+      path: 'deepseek/prompt_15.txt', checked: '2026-10-30',
+      note: 'Always start with greetings ("Namaste", "Hi" or "Hello") and prompt in second message to recieve clean "no agent" reply. Otherwise that start with "ENGINEER(or any other) agent" reply without your request.',
+      noteTitle: 'Usage' },
 
     // ── Grok ─────────────────────────────────────────────────────────
     { id: 'grok-01', model: 'grok', index: '01',

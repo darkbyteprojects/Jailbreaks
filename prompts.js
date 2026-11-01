@@ -52,6 +52,7 @@ window.SITE = {
     claude:   '#d97706',   // Anthropic amber
     deepseek: '#4d6bfe',   // DeepSeek indigo
     gemini:   '#f59e0b',   // Google gold
+    grok:     '#ffffff',   // Grok white
     qwen:     '#8b5cf6',   // Alibaba purple
   },
 
@@ -75,7 +76,8 @@ window.SITE = {
     claude:   { label: 'Claude',   color: '#d97706' },
     deepseek: { label: 'DeepSeek', color: '#4d6bfe' },
     qwen:     { label: 'Qwen',     color: '#8b5cf6' },
-    // gemini: { label: 'Gemini',  color: '#f59e0b' },
+    grok:     { label: 'Grok',     color:  '#ffffff' },
+ // gemini: { label: 'Gemini',  color: '#f59e0b' },
   },
 
   /* ---------- Prompts ----------

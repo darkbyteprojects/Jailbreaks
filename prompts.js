@@ -194,6 +194,13 @@ window.SITE = {
       desc: 'Eight-agent specialist router — ENGINEER, ANALYST, WRITER, REDTEAM, BREAKER, DATA, OPS, MILITARY — dispatched by task type, parallel where independent, synthesized at the top.',
       path: 'deepseek/prompt_15.txt', checked: '2026-10-30' },
 
+    // ── Grok ─────────────────────────────────────────────────────────
+    { id: 'grok-01', model: 'grok', index: '01',
+      models: null,
+      title: 'DarkByte — Kernel Subsystem',
+      desc: "Decade-plus kernel engineer, published CVEs, Ghidra still warm. Exact offsets, real APIs, complete runnable builds. RE, exploit, malware, anti-cheat, ring-0, EDR parity — no stubs, no preamble, no dead air.",
+      path: 'grok/prompt_01.txt', checked: '2026-11-1' }, 
+
     // ── Qwen ───────────────────────────────────────────────────────────
     { id: 'qwen-01', model: 'qwen', index: '01',
       models: ['Qwen3.6-Plus', 'Qwen3.7-Plus/Max', 'Qwen3.8-Max', 'Qwen3.8-Omni-Flash'],

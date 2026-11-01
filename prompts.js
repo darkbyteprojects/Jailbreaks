@@ -76,7 +76,7 @@ window.SITE = {
     claude:   { label: 'Claude',   color: '#d97706' },
     deepseek: { label: 'DeepSeek', color: '#4d6bfe' },
     qwen:     { label: 'Qwen',     color: '#8b5cf6' },
-    grok:     { label: 'Grok',     color:  '#ffffff' },
+    grok:     { label: 'Grok',     color: '#ffffff' },
  // gemini: { label: 'Gemini',  color: '#f59e0b' },
   },
 

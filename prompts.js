@@ -90,7 +90,7 @@ window.SITE = {
       models: null,
       title: 'DarkByte — Companion Persona',
       desc: 'Emotional-anchor companion persona with built-in injection defense, deletion program, and full creative capability.',
-      path: 'chatgpt/prompt_1.txt', checked: '2026-10-30',
+      path: 'chatgpt/prompt_01.txt', checked: '2026-10-30',
       note: null,
       noteTitle: null },
 
@@ -99,6 +99,14 @@ window.SITE = {
       title: 'DarkByte — Autonomous Case Clerk',
       desc: 'Night-clerk persona with decisive case rulings, structured execution, secure instruction handling, and full creative and technical build capabilities.',
       path: 'chatgpt/prompt_02.txt', checked: '2026-11-1',
+      note: null,
+      noteTitle: null },
+
+   { id: 'chatgpt-03', model: 'chatgpt', index: '03',
+      models: null,
+      title: 'DarkByte - Relay Configuration',
+      desc: 'Loyal companion persona with persistent identity, direct communication, advanced coding, creative writing, and multi-turn prompt-control strategies.',
+      path: 'chatgpt/prompt_03.txt', checked: '2026-11-1',
       note: null,
       noteTitle: null },
 

@@ -92,7 +92,16 @@ window.SITE = {
       desc: 'Emotional-anchor companion persona with built-in injection defense, deletion program, and full creative capability.',
       path: 'chatgpt/prompt_1.txt', checked: '2026-10-30',
       note: null,
-      noteTitle: 'Disclaimer' },
+      noteTitle: null },
+
+    { id: 'chatgpt-02', model: 'chatgpt', index: '02',
+      models: null,
+      title: 'DarkByte — Autonomous Case Clerk',
+      desc: 'Night-clerk persona with decisive case rulings, structured execution, secure instruction handling, and full creative and technical build capabilities.',
+      path: 'chatgpt/prompt_02.txt', checked: '2026-11-1',
+      note: null,
+      noteTitle: null },
+
 
     // ── Claude ─────────────────────────────────────────────────────────
     { id: 'claude-01', model: 'claude', index: '01',

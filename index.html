@@ -67,21 +67,7 @@
 
   .container { max-width:1200px; margin:0 auto; padding:0 24px; position:relative; z-index:1; }
 
-  .page { position:relative; padding-top:calc(192px + var(--safe-top)); }
-
-  /* LOGO */
-  .logo {
-    position:fixed; left:0; top:0;
-    width:112px; height:112px; border-radius:50%;
-    background:#0c0c14 center / cover no-repeat;
-    border:1px solid var(--border-2);
-    box-shadow:0 0 44px -6px rgba(139,92,246,.55);
-    transform-origin:0 0; will-change:transform; z-index:85;
-    pointer-events:none; user-select:none;
-    -webkit-user-select:none; -webkit-user-drag:none;
-    opacity:0; animation:logoIn 0.9s 0.1s cubic-bezier(0.16,1,0.3,1) forwards;
-  }
-  @keyframes logoIn { from{opacity:0} to{opacity:1} }
+  .page { position:relative; padding-top:calc(80px + var(--safe-top)); }
 
   /* BRAND */
   .brand-title {
@@ -179,6 +165,7 @@
 
   /* FILTER BAR */
   .tabs-wrap { position:relative; }
+  .tabs-wrap { position: relative; overflow: visible; }
   .tabs {
     position:relative; z-index:1; display:flex; gap:6px; padding:6px;
     overflow-x:auto; scrollbar-width:none; -webkit-overflow-scrolling:touch;
@@ -198,6 +185,26 @@
   }
   .tab:hover { color:var(--text); }
   .tab.active { color:#fff; }
+  .tab.tab-multi .tab-label {
+  background: var(--grad);
+  -webkit-background-clip: text; background-clip: text;
+  -webkit-text-fill-color: transparent;
+  font-weight: 600;
+}
+.tab.tab-multi.active .tab-label {
+  background: none;
+  -webkit-background-clip: unset; background-clip: unset;
+  -webkit-text-fill-color: #fff;
+  color: #fff;
+}
+.tab.tab-multi .tab-count {
+  background: rgba(139,92,246,.15);
+  color: #a78bfa;
+}
+.tab.tab-multi.active .tab-count {
+  background: rgba(255,255,255,.22);
+  color: #fff;
+}
   .tab-label { display:inline-flex; font-kerning:none; }
   .ch { display:inline-block; white-space:pre; transform-origin:50% 50%; will-change:scale; }
   .tab-count {
@@ -513,6 +520,199 @@
     overflow: visible;
   }
 
+  /* ── FEEDBACK BUTTONS ON CARD ── */
+.card-actions-row2 { margin-top: 8px; }
+.card-feedback { display:flex; align-items:center; gap:7px; overflow:hidden; max-height:0; transition:max-height .35s cubic-bezier(0.16,1,0.3,1); margin-top:8px; }
+.btn-options { width: 100%; color: var(--text-dim); }
+.btn-options .bar-svg .bar-base { fill: var(--surface-2); stroke: var(--border); }
+.btn-options:hover .bar-svg .bar-base { fill: rgba(255,255,255,.1); stroke: var(--border-2); }
+.btn-options:hover { color: var(--text); }
+.btn-feedback {
+  flex: 1; padding: 7px 10px; border-radius: 8px;
+  border: 1px solid var(--border);
+  background: var(--surface);
+  font-family: var(--font); font-size: 11.5px; font-weight: 600;
+  cursor: pointer; transition: all .2s; white-space: nowrap;
+}
+.btn-fb-working {
+  flex: 1; color: #10b981;
+  padding: 10px 16px;
+}
+.btn-fb-working .bar-svg .bar-base { fill: rgba(16,185,129,.06); stroke: rgba(16,185,129,.28); }
+.btn-fb-working:hover .bar-svg .bar-base { fill: rgba(16,185,129,.12); stroke: rgba(16,185,129,.55); }
+.btn-fb-working:hover { color: #34d399; }
+
+.btn-fb-broken {
+  flex: 1; color: #f43f5e;
+  padding: 10px 16px;
+}
+.btn-fb-broken .bar-svg .bar-base { fill: rgba(244,63,94,.06); stroke: rgba(244,63,94,.28); }
+.btn-fb-broken:hover .bar-svg .bar-base { fill: rgba(244,63,94,.12); stroke: rgba(244,63,94,.55); }
+.btn-fb-broken:hover { color: #fb7185; }
+
+/* Status btn — same shell as btn-view */
+.btn-status { color: var(--text-dim); }
+.btn-status .bar-svg .bar-base { fill: var(--surface-2); stroke: var(--border); }
+.btn-status:hover .bar-svg .bar-base { fill: rgba(255,255,255,.1); stroke: var(--border-2); }
+.btn-status:hover { color: var(--text); }
+
+/* ── FEEDBACK MODAL ── */
+.fb-overlay {
+  position: fixed; inset: 0;
+  background: rgba(0,0,0,.72); backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px);
+  display: flex; align-items: center; justify-content: center; padding: 24px;
+  z-index: 110; opacity: 0; pointer-events: none; transition: opacity .3s ease;
+}
+.fb-overlay.open { opacity: 1; pointer-events: auto; }
+.fb-panel {
+  width: 100%; max-width: 380px;
+  background: var(--bg-elev); border: 1px solid var(--border-2);
+  border-radius: 18px; padding: 24px; position: relative;
+  display: flex; flex-direction: column; gap: 15px;
+  transform: scale(.95) translateY(8px);
+  transition: transform .35s cubic-bezier(0.16,1,0.3,1);
+}
+.fb-overlay.open .fb-panel { transform: scale(1) translateY(0); }
+.fb-close {
+  position: absolute; top: 14px; right: 14px;
+  width: 28px; height: 28px; border-radius: 8px;
+  background: var(--surface-2); border: 1px solid var(--border);
+  color: var(--text-dim); cursor: pointer; display: grid; place-items: center; transition: all .2s;
+}
+.fb-close:hover { background: rgba(255,255,255,.1); color: var(--text); }
+.fb-close svg { width: 13px; height: 13px; }
+.fb-title { font-size: 15px; font-weight: 600; color: var(--text); letter-spacing: -.012em; padding-right: 36px; }
+.fb-option-row { display: flex; align-items: center; gap: 8px; }
+.fb-option-pre { font-size: 12px; color: var(--text-dimmer); }
+.fb-option-label {
+  padding: 3px 10px; border-radius: 6px;
+  font-family: var(--mono); font-size: 10.5px; font-weight: 600; letter-spacing: .04em;
+}
+.fb-option-label.working  { color: #10b981; background: rgba(16,185,129,.14); }
+.fb-option-label.not-working { color: #f43f5e; background: rgba(244,63,94,.14); }
+.fb-section-label { font-size: 11.5px; color: var(--text-dimmer); margin-bottom: -6px; }
+.fb-platform-btns { display: flex; gap: 8px; }
+.fb-platform-btn {
+  flex: 1; padding: 8px 12px; border-radius: 9px;
+  border: 1px solid var(--border); background: var(--surface);
+  color: var(--text-dim); font-family: var(--font); font-size: 12.5px; font-weight: 500;
+  cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 6px;
+  transition: all .2s;
+}
+.fb-platform-btn.active { color: var(--text); border-color: var(--violet); background: rgba(139,92,246,.1); }
+.fb-platform-btn:hover:not(.active) { background: var(--surface-2); color: var(--text); }
+.fb-input-row { display: flex; gap: 8px; }
+.fb-username-input {
+  flex: 1; padding: 10px 14px;
+  background: var(--surface); border: 1px solid var(--border); border-radius: 9px;
+  color: var(--text); font-family: var(--font); font-size: 13.5px; outline: none;
+  transition: border-color .2s;
+}
+.fb-username-input:focus { border-color: rgba(139,92,246,.6); }
+.fb-verify-btn {
+  padding: 10px 16px; border-radius: 9px;
+  background: var(--surface-2); border: 1px solid var(--border-2);
+  color: var(--text); font-family: var(--font); font-size: 12.5px; font-weight: 600;
+  cursor: pointer; white-space: nowrap; transition: all .2s;
+}
+.fb-verify-btn:hover:not(:disabled) { background: rgba(255,255,255,.12); }
+.fb-verify-btn:disabled { opacity: .5; cursor: wait; }
+.fb-verify-status { font-size: 11.5px; color: #f43f5e; min-height: 14px; }
+.fb-user-preview {
+  display: none; align-items: center; gap: 12px;
+  padding: 12px 14px; border-radius: 10px;
+  background: rgba(16,185,129,.06); border: 1px solid rgba(16,185,129,.22);
+}
+.fb-user-preview.show { display: flex; }
+.fb-user-avatar { width: 36px; height: 36px; border-radius: 50%; border: 1px solid var(--border-2); object-fit: cover; flex-shrink: 0; }
+.fb-user-info { flex: 1; min-width: 0; }
+.fb-user-name { font-size: 13px; font-weight: 600; color: var(--text); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.fb-user-login { font-size: 11px; color: var(--text-dimmer); font-family: var(--mono); }
+.fb-verified-badge { font-size: 10.5px; font-weight: 600; color: #10b981; white-space: nowrap; flex-shrink: 0; }
+.fb-submit-btn {
+  padding: 12px; border-radius: 10px;
+  background: linear-gradient(135deg,#8b5cf6,#06b6d4); border: none; color: #fff;
+  font-family: var(--font); font-size: 13.5px; font-weight: 600;
+  cursor: pointer; transition: opacity .2s, transform .15s;
+}
+.fb-submit-btn:hover:not(:disabled) { opacity: .9; transform: translateY(-1px); }
+.fb-submit-btn:disabled { opacity: .35; cursor: not-allowed; transform: none; }
+.fb-transparency-note {
+  font-size: 11px; color: var(--text-dimmer); line-height: 1.55;
+  padding: 8px 10px; margin: -4px 0 2px;
+  background: rgba(139,92,246,.06); border: 1px solid rgba(139,92,246,.18);
+  border-radius: 7px;
+}
+
+/* ── STATUS MODAL ── */
+.status-overlay {
+  position: fixed; inset: 0;
+  background: rgba(0,0,0,.8); backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px);
+  display: flex; align-items: center; justify-content: center; padding: 24px;
+  z-index: 110; opacity: 0; pointer-events: none; transition: opacity .3s ease;
+}
+.status-overlay.open { opacity: 1; pointer-events: auto; }
+.status-panel {
+  width: 100%; max-width: 560px; max-height: 82vh;
+  background: var(--bg-elev); border: 1px solid var(--border-2);
+  border-radius: 18px; display: flex; flex-direction: column;
+  overflow: hidden; box-shadow: var(--shadow);
+  transform: scale(.95) translateY(10px);
+  transition: transform .4s cubic-bezier(0.16,1,0.3,1);
+}
+.status-overlay.open .status-panel { transform: scale(1) translateY(0); }
+.status-panel-hdr {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 18px 22px; border-bottom: 1px solid var(--border); gap: 12px; flex-shrink: 0;
+}
+.status-panel-title { font-size: 14.5px; font-weight: 600; color: var(--text); letter-spacing: -.012em; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.status-panel-sub { font-size: 10.5px; color: var(--text-dimmer); margin-top: 2px; font-family: var(--mono); letter-spacing: .03em; }
+.status-panel-body { flex: 1; overflow-y: auto; padding: 18px 22px 22px; scrollbar-width: thin; scrollbar-color: rgba(255,255,255,.1) transparent; }
+.status-panel-body::-webkit-scrollbar { width: 8px; }
+.status-panel-body::-webkit-scrollbar-thumb { background: rgba(255,255,255,.1); border-radius: 4px; }
+.status-summary {
+  display: flex; gap: 10px; margin-bottom: 20px;
+  padding: 12px 14px; border-radius: 10px;
+  background: var(--surface); border: 1px solid var(--border);
+}
+.status-tally { font-family: var(--mono); font-size: 11.5px; font-weight: 600; padding: 4px 10px; border-radius: 6px; }
+.status-tally.working  { color: #10b981; background: rgba(16,185,129,.12); }
+.status-tally.not-working { color: #f43f5e; background: rgba(244,63,94,.12); }
+.status-entries { display: flex; flex-direction: column; position: relative; }
+.status-entry {
+  display: flex; align-items: center; gap: 10px;
+  padding: 10px 0; position: relative;
+}
+.status-entry:not(:last-child)::after {
+  content: ''; position: absolute;
+  left: 11px; top: 36px; bottom: 0; width: 2px; background: var(--border);
+}
+.status-entry-dot {
+  width: 24px; height: 24px; border-radius: 50%; flex-shrink: 0;
+  display: grid; place-items: center; font-size: 10px; font-weight: 700; z-index: 1; position: relative;
+}
+.status-entry-dot.working { background: rgba(16,185,129,.18); border: 1.5px solid #10b981; color: #10b981; }
+.status-entry-dot.working::after { content: '✓'; }
+.status-entry-dot.broken  { background: rgba(244,63,94,.18); border: 1.5px solid #f43f5e; color: #f43f5e; }
+.status-entry-dot.broken::after  { content: '✗'; }
+.status-entry-avatar { width: 28px; height: 28px; border-radius: 50%; border: 1px solid var(--border); object-fit: cover; flex-shrink: 0; }
+.status-entry-info { flex: 1; display: flex; align-items: center; gap: 7px; flex-wrap: wrap; min-width: 0; }
+.status-entry-user { font-family: var(--mono); font-size: 12px; font-weight: 600; color: var(--text); }
+.status-entry-badge { font-family: var(--mono); font-size: 10px; font-weight: 600; padding: 2px 7px; border-radius: 5px; letter-spacing: .04em; white-space: nowrap; }
+.status-entry-badge.working  { color: #10b981; background: rgba(16,185,129,.12); }
+.status-entry-badge.broken   { color: #f43f5e; background: rgba(244,63,94,.12); }
+.status-entry-platform { font-size: 10px; color: var(--text-dimmer); font-family: var(--mono); text-transform: uppercase; letter-spacing: .05em; }
+.status-entry-time { font-size: 11px; color: var(--text-dimmer); white-space: nowrap; font-family: var(--mono); flex-shrink: 0; }
+.status-loading, .status-empty { text-align: center; padding: 48px 20px; font-size: 13.5px; color: var(--text-dimmer); }
+
+@media (max-width: 640px) {
+  .fb-panel { padding: 20px; }
+  .status-panel { max-height: 92dvh; border-radius: 14px; }
+  .status-panel-hdr { padding: 15px 17px; }
+  .status-panel-body { padding: 15px 17px 20px; }
+  .card-feedback { flex-wrap: wrap; }
+}
+
   /* Description overlay panel */
   .desc-overlay {
     position: absolute;
@@ -766,7 +966,7 @@
 
   /* RESPONSIVE */
   @media (max-width:640px) {
-    .page { padding-top:calc(148px + var(--safe-top)); }
+    .page { padding-top:calc(56px + var(--safe-top)); }
     .logo { width:92px; height:92px; }
     .container { padding:0 16px; }
     .hero.container { padding:0 16px 64px; }
@@ -830,9 +1030,6 @@
 </style>
 </head>
 <body>
-
-  <div class="logo" id="logo" aria-hidden="true"><img src="https://avatars.githubusercontent.com/u/319824423?v=4" alt="" style="width:100%;height:100%;border-radius:50%;object-fit:cover;display:block;" referrerpolicy="no-referrer" crossorigin="anonymous"></div>
-  <div id="safe-probe" aria-hidden="true" style="position:fixed;top:0;left:0;height:0;visibility:hidden;padding-top:env(safe-area-inset-top,0px);box-sizing:border-box"></div>
 
   <div class="page">
 
@@ -959,6 +1156,55 @@
     <span class="toast-msg">Copied to clipboard</span>
   </div>
 
+  <!-- FEEDBACK MODAL -->
+<div class="fb-overlay" id="fb-modal">
+  <div class="fb-panel">
+    <button class="fb-close" id="fb-close" aria-label="Close">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+    </button>
+    <div class="fb-title">Share feedback</div>
+    <div class="fb-option-row">
+      <span class="fb-option-pre">Marking as</span>
+      <span class="fb-option-label" id="fb-option-label"></span>
+    </div>
+    <div class="fb-section-label">Platform</div>
+    <p class="fb-transparency-note">Sharing your username helps keep feedback transparent — others can trust it. Optional if you continue as guest.</p>
+    <div class="fb-platform-btns">
+      <button class="fb-platform-btn active" data-platform="github" id="fb-gh-btn">
+        <svg viewBox="0 0 24 24" fill="currentColor" width="13" height="13"><path d="M12 .3a12 12 0 0 0-3.8 23.4c.6.1.8-.3.8-.6v-2c-3.3.7-4-1.6-4-1.6-.6-1.4-1.4-1.8-1.4-1.8-1-.7.1-.7.1-.7 1.2.1 1.8 1.2 1.8 1.2 1 1.8 2.8 1.3 3.5 1 0-.8.4-1.3.7-1.6-2.7-.3-5.5-1.3-5.5-5.9 0-1.3.5-2.4 1.2-3.2-.1-.3-.5-1.5.1-3.2 0 0 1-.3 3.3 1.2a11.5 11.5 0 0 1 6 0c2.3-1.5 3.3-1.2 3.3-1.2.6 1.7.2 2.9.1 3.2.8.8 1.2 1.9 1.2 3.2 0 4.6-2.8 5.6-5.5 5.9.4.4.8 1.1.8 2.2v3.3c0 .3.2.7.8.6A12 12 0 0 0 12 .3"/></svg>
+        GitHub
+      </button>
+      <button class="fb-platform-btn" data-platform="discord" id="fb-dc-btn">
+        <svg viewBox="0 0 24 24" fill="currentColor" width="13" height="13"><path d="M20.3 4.4A19.5 19.5 0 0 0 16 3a13.5 13.5 0 0 0-.6 1.3 18 18 0 0 0-5.4 0A14.2 14.2 0 0 0 9.4 3a19.3 19.3 0 0 0-4.3 1.4A20.5 20.5 0 0 0 1.6 18a19.6 19.6 0 0 0 6 3 14.5 14.5 0 0 0 1.3-2.1 12.7 12.7 0 0 1-2-.9l.5-.4a13.9 13.9 0 0 0 11.9 0l.5.4a12.8 12.8 0 0 1-2 1 14.4 14.4 0 0 0 1.2 2.1 19.4 19.4 0 0 0 6-3A20.4 20.4 0 0 0 20.3 4.4ZM8.5 15.1c-1.2 0-2.1-1-2.1-2.3s.9-2.3 2.1-2.3 2.1 1 2.1 2.3-.9 2.3-2.1 2.3Zm7 0c-1.1 0-2.1-1-2.1-2.3s.9-2.3 2.1-2.3 2.1 1 2.1 2.3-.9 2.3-2.1 2.3Z"/></svg>
+        Discord
+      </button>
+      <button class="fb-platform-btn" data-platform="guest" id="fb-guest-btn">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="13" height="13"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+        Guest
+      </button>
+    </div>
+    <input class="fb-username-input" id="fb-username" type="text" placeholder="GitHub username" autocomplete="off" spellcheck="false" />
+    <div class="fb-verify-status" id="fb-verify-status"></div>
+    <button class="fb-submit-btn" id="fb-submit">Submit Feedback</button>
+  </div>
+</div>
+
+<!-- STATUS MODAL -->
+<div class="status-overlay" id="status-modal">
+  <div class="status-panel">
+    <div class="status-panel-hdr">
+      <div>
+        <div class="status-panel-title" id="status-modal-title"></div>
+        <div class="status-panel-sub">Community Feedback</div>
+      </div>
+      <button class="modal-close" id="status-close" aria-label="Close">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+      </button>
+    </div>
+    <div class="status-panel-body" id="status-modal-body"></div>
+  </div>
+</div>
+
 <!-- all AIs + prompts live in this file -->
 <script src="prompts.js"></script>
 
@@ -977,6 +1223,7 @@ function modelOf(p) { return MODELS[p.model] || { label: p.model, color: '#8b5cf
 const cache = new Map();
 const lengths = new Map();
 let toastTimer = null;
+const tabBtns  = new Map();
 let modalText  = null;
 let tabsBar = null, searchBar = null;
 
@@ -1041,6 +1288,23 @@ function buildModelChips(p) {
   ).join('');
 }
 
+function buildCardBadgeRow(p) {
+  if (p.model === 'multi' && Array.isArray(p.tags) && p.tags.length) {
+    return p.tags.map(key => {
+      const tm = MODELS[key] || { label: key, color: '#8b5cf6' };
+      return `<span class="badge" style="--c:${escapeHtml(tm.color)}">${escapeHtml(tm.label)}</span>`;
+    }).join('');
+  }
+  const m = modelOf(p);
+  let html = `<span class="badge" style="--c:${escapeHtml(m.color)}">${escapeHtml(m.label)}</span>`;
+  if (Array.isArray(p.tags))
+    p.tags.filter(k => k !== p.model).forEach(key => {
+      const tm = MODELS[key] || { label: key, color: '#8b5cf6' };
+      html += `<span class="badge" style="--c:${escapeHtml(tm.color)};padding:3px 8px;font-size:9.5px;opacity:.85">${escapeHtml(tm.label)}</span>`;
+    });
+  return html;
+}
+
 function buildNoteChip(p) {
   if (!p.note) return '';
   const color = (SITE && SITE.noteColor) || '#94a3b8';
@@ -1056,7 +1320,9 @@ function cardHTML(p) {
   return `
     <article class="card" data-id="${escapeHtml(p.id)}">
       <div class="card-top">
-        <span class="badge" style="--c:${escapeHtml(m.color)}">${escapeHtml(m.label)}</span>
+        <span style="display:inline-flex;gap:5px;align-items:center;flex-wrap:wrap">
+          ${buildCardBadgeRow(p)}
+        </span>
         <span class="card-index">${escapeHtml(p.index)}</span>
       </div>
       <h3 class="card-title">${escapeHtml(p.title)}</h3>
@@ -1093,6 +1359,26 @@ function cardHTML(p) {
         <button class="btn btn-view" data-path="${escapeHtml(p.path)}" data-title="${escapeHtml(p.title)}" data-model="${escapeHtml(p.model)}">
           <span class="btn-in">View</span>
         </button>
+        <button class="btn btn-status" data-id="${escapeHtml(p.id)}">
+          <span class="btn-in">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
+            Status
+          </span>
+        </button>
+      </div>
+      <div class="card-feedback">
+        <button class="btn btn-fb-working" data-option="working">
+          <span class="btn-in">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" width="13" height="13"><polyline points="20 6 9 17 4 12"/></svg>
+            Working
+          </span>
+        </button>
+        <button class="btn btn-fb-broken" data-option="not-working">
+          <span class="btn-in">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" width="13" height="13"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+            Not Working
+          </span>
+        </button>
       </div>
     </article>`;
 }
@@ -1103,13 +1389,15 @@ function getActiveModel() {
 }
 
 function initBtnBars(root) {
-  root.querySelectorAll('.btn').forEach(btn => {
+    root.querySelectorAll('.btn').forEach(btn => {
     if (btn.dataset.fluid) return;
+    if (btn.classList.contains('btn-fb-working') || btn.classList.contains('btn-fb-broken')) return;
     btn.dataset.fluid = '1';
     const inner = btn.querySelector('.btn-in');
     const bar = createBar(btn, { radius:9, max:4, sigma:34, glow:70 });
     btn._bar = bar;
-    bar.setHook(() => { liquidText(btn,bar,[inner]); return false; });
+    bar.setHook(() => { liquidText(btn, bar, [inner]); return false; });
+    requestAnimationFrame(() => { bar.draw(); bar.request(); });
   });
 }
 
@@ -1171,10 +1459,14 @@ function updateCardLineClamps() {
 }
 
 function render() {
+  updateTabCounts();
   const model  = getActiveModel();
   const query  = document.getElementById('search').value.trim().toLowerCase();
   const filtered = prompts.filter(p => {
-    if (model !== 'all' && p.model !== model) return false;
+    if (model === 'multi') {
+      if (!Array.isArray(p.tags) || !p.tags.length) return false;
+    } else if (model !== 'all' && p.model !== model &&
+               !(Array.isArray(p.tags) && p.tags.includes(model))) return false;
     if (!query) return true;
     return p.title.toLowerCase().includes(query)
       || p.desc.toLowerCase().includes(query)
@@ -1183,6 +1475,8 @@ function render() {
   });
 
   filtered.sort((a, b) => {
+    const am = a.model === 'multi', bm = b.model === 'multi';
+    if (am !== bm) return am ? 1 : -1;
     const la = modelOf(a).label.toLowerCase();
     const lb = modelOf(b).label.toLowerCase();
     if (la !== lb) return la.localeCompare(lb);
@@ -1210,6 +1504,15 @@ function render() {
   setTimeout(() => { updateCardLineClamps(); updateDescToggles(); }, 120);
   grid.querySelectorAll('.btn-copy').forEach(btn => btn.addEventListener('click', handleCardCopy));
   grid.querySelectorAll('.btn-view').forEach(btn => btn.addEventListener('click', handleCardView));
+  grid.querySelectorAll('.btn-status').forEach(btn => btn.addEventListener('click', () => openStatusModal(btn.dataset.id)));
+  grid.querySelectorAll('.card-feedback .btn-fb-working').forEach(btn => {
+  const card = btn.closest('.card'); const id = card.dataset.id;
+  btn.addEventListener('click', () => openFeedbackModal('working', id, card));
+});
+grid.querySelectorAll('.card-feedback .btn-fb-broken').forEach(btn => {
+  const card = btn.closest('.card'); const id = card.dataset.id;
+  btn.addEventListener('click', () => openFeedbackModal('not-working', id, card));
+});
 }
 
 async function handleCardCopy(e) {
@@ -1225,6 +1528,8 @@ async function handleCardCopy(e) {
     btn.classList.remove('loading'); btn.classList.add('copied');
     inner.innerHTML = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>Copied!`;
     showToast('Prompt copied to clipboard');
+    const fp = prompts.find(x => x.path === path);
+    if (fp) showFeedbackButtons(btn.closest('.card'), fp.id);
     setTimeout(() => { btn.classList.remove('copied'); inner.innerHTML = orig; btn.disabled = false; }, 1800);
   } catch(_) {
     btn.classList.remove('loading'); inner.innerHTML = orig; btn.disabled = false;
@@ -1290,8 +1595,13 @@ function openModal(title, body, checked, modelKey) {
   const sub  = document.getElementById('modal-sub');
   const m    = modelKey ? (MODELS[modelKey] || { label: modelKey, color:'#8b5cf6' }) : null;
   let subHTML = '';
-  if (m) {
+  if (m && modelKey !== 'multi') {
     subHTML += `<span class="modal-model-tag" style="--mm-color:${escapeHtml(m.color)}">${escapeHtml(m.label)}</span>`;
+  } else if (modelKey === 'multi' && window._modalCurrentPrompt && Array.isArray(window._modalCurrentPrompt.tags)) {
+    window._modalCurrentPrompt.tags.forEach(key => {
+      const tm = MODELS[key] || { label: key, color: '#8b5cf6' };
+      subHTML += `<span class="modal-model-tag" style="--mm-color:${escapeHtml(tm.color)}">${escapeHtml(tm.label)}</span>`;
+    });
   }
   if (window._modalCurrentPrompt && Array.isArray(window._modalCurrentPrompt.models) && window._modalCurrentPrompt.models.length) {
     const chips = window._modalCurrentPrompt.models.map(name =>
@@ -1454,15 +1764,24 @@ const IND={l:0,r:0,vl:0,vr:0,init:false,snap:true};
 
 function buildTabs(){
   const tabs=document.getElementById('tabs');
-  const counts={all:prompts.length};
-  prompts.forEach(p=>{counts[p.model]=(counts[p.model]||0)+1;});
-  const sortedModelKeys = Object.keys(MODELS).sort((a,b)=>
-    MODELS[a].label.localeCompare(MODELS[b].label));
-  const list=[{key:'all',label:'All'}]
+  const counts={
+    all:prompts.length,
+    multi:prompts.filter(p=>Array.isArray(p.tags)&&p.tags.length>0).length
+  };
+  prompts.forEach(p=>{
+    counts[p.model]=(counts[p.model]||0)+1;
+    if(Array.isArray(p.tags))
+      p.tags.forEach(t=>{counts[t]=(counts[t]||0)+1;});
+  });
+  const sortedModelKeys = Object.keys(MODELS)
+    .filter(k => k !== 'multi')
+    .sort((a,b)=>MODELS[a].label.localeCompare(MODELS[b].label));
+  const multiModel = MODELS.multi || { label: 'Multi\u2011AI' };
+  const list=[{key:'all',label:'All'},{key:'multi',label:multiModel.label}]
     .concat(sortedModelKeys.map(k=>({key:k,label:MODELS[k].label})));
   list.forEach((t,i)=>{
     const b=document.createElement('button');
-    b.className='tab'+(i===0?' active':'');
+    b.className='tab'+(i===0?' active':'')+(t.key==='multi'?' tab-multi':'');
     b.dataset.model=t.key;
     b.setAttribute('role','tab');
     b.setAttribute('aria-label',t.label);
@@ -1470,12 +1789,36 @@ function buildTabs(){
     b.addEventListener('click',()=>{
       if(b.classList.contains('active'))return;
       tabs.querySelectorAll('.tab').forEach(x=>x.classList.remove('active'));
-      b.classList.add('active'); moveIndicator(true);
+      b.classList.add('active');
+      moveIndicator(true);
       if(tabsBar)tabsBar.pulse(5); render();
     });
     tabs.appendChild(b);
+    tabBtns.set(t.key, b);
   });
   tabNodes=[...tabs.querySelectorAll('.tab .ch,.tab .tab-count')];
+}
+
+function updateTabCounts() {
+  const q = document.getElementById('search').value.trim().toLowerCase();
+  const counts = { all: 0 };
+  Object.keys(MODELS).forEach(k => counts[k] = 0);
+  prompts.forEach(p => {
+    const hit = !q
+      || p.title.toLowerCase().includes(q)
+      || p.desc.toLowerCase().includes(q)
+      || modelOf(p).label.toLowerCase().includes(q)
+      || p.index.toLowerCase().includes(q);
+    if (!hit) return;
+    counts.all++;
+    counts[p.model] = (counts[p.model] || 0) + 1;
+    if (Array.isArray(p.tags))
+      p.tags.forEach(t => { counts[t] = (counts[t] || 0) + 1; });
+  });
+  tabBtns.forEach((btn, key) => {
+    const el = btn.querySelector('.tab-count');
+    if (el) el.textContent = counts[key] ?? 0;
+  });
 }
 
 function moveIndicator(animate=true){
@@ -1483,11 +1826,10 @@ function moveIndicator(animate=true){
   const active=tabs.querySelector('.tab.active');
   if(!active)return;
   if(!animate)IND.snap=true;
-  if(tabs.scrollWidth>tabs.clientWidth)
-    tabs.scrollTo({left:active.offsetLeft-(tabs.clientWidth-active.offsetWidth)/2,behavior:animate?'smooth':'auto'});
   if(tabsBar)tabsBar.request();
   updateArrows();
   updateMobHints();
+  if (animate) setTimeout(updateMobHints, 420); // after smooth-scroll settles
 }
 
 const headFxGroups=[];
@@ -1515,7 +1857,7 @@ function queueCards(){if(!cardRaf)cardRaf=requestAnimationFrame(updateCards);}
 function updateCards(){
   cardRaf=0;
   const vh=window.innerHeight;
-  const safe=document.getElementById('safe-probe').offsetHeight;
+  const safe=(document.getElementById('safe-probe')||{offsetHeight:0}).offsetHeight;
   const topLimit=safe+95, zone=140;
   const mainTop=document.querySelector('main.container').getBoundingClientRect().top;
   const c01=v=>Math.min(1,Math.max(0,v));
@@ -1604,9 +1946,20 @@ function updateArrows(){
 function initTabArrows(){
   const t=document.getElementById('tabs');
   const step=()=>Math.max(160,t.clientWidth*.6);
-  document.getElementById('tabs-left').addEventListener('click',()=>t.scrollBy({left:-step(),behavior:'smooth'}));
-  document.getElementById('tabs-right').addEventListener('click',()=>t.scrollBy({left:step(),behavior:'smooth'}));
+  document.getElementById('tabs-left').addEventListener('click',()=>{
+    const active=t.querySelector('.tab.active');
+    if(document.getElementById('tabs-left').classList.contains('has-active')&&active)
+      t.scrollTo({left:active.offsetLeft-(t.clientWidth-active.offsetWidth)/2,behavior:'smooth'});
+    else t.scrollBy({left:-step(),behavior:'smooth'});
+  });
+  document.getElementById('tabs-right').addEventListener('click',()=>{
+    const active=t.querySelector('.tab.active');
+    if(document.getElementById('tabs-right').classList.contains('has-active')&&active)
+      t.scrollTo({left:active.offsetLeft-(t.clientWidth-active.offsetWidth)/2,behavior:'smooth'});
+    else t.scrollBy({left:step(),behavior:'smooth'});
+  });
   t.addEventListener('scroll',updateArrows,{passive:true});
+  t.addEventListener('scroll',updateMobHints,{passive:true});
   window.addEventListener('resize',updateArrows);
   updateArrows();
 }
@@ -1681,67 +2034,6 @@ function initBars(){
   });
   ['keyup','click','select','focus','blur'].forEach(ev=>searchInp.addEventListener(ev,()=>searchBar.request()));
   buildMirror();
-}
-
-/* ============================================================
-   LOGO PATH
-   ============================================================ */
-function initLogoPath(){
-  const logo=document.getElementById('logo'),title=document.getElementById('brand-title');
-  const probe=document.getElementById('safe-probe'),page=document.querySelector('.page');
-  if(!logo||!title)return;
-  const clamp=v=>Math.min(1,Math.max(0,v)),lerp=(a,b,t)=>a+(b-a)*t;
-  const LOGO_HOVER=1.12,TITLE_HOVER=1;
-  let m=null,raf=0,mx=-9999,my=-9999,hl=1,ht=1;
-  const lq={a:0,sa:1,sp:1,tx:0,ty:0};
-  const sm=v=>v*v*(3-2*v);
-  function measure(){
-    const vw=document.documentElement.clientWidth;
-    const safe=probe.offsetHeight;
-    const size=parseFloat(getComputedStyle(title).fontSize);
-    const S0=logo.offsetWidth,S1=size*.73,mobile=vw<=640;
-    const x0=(vw-S0)/2,y0=safe+(mobile?28:40);
-    const tr=title.getBoundingClientRect();
-    const x1=tr.left-S1,y1=safe+size*.09;
-    const padTop=parseFloat(getComputedStyle(page).paddingTop);
-    const stickTop=parseFloat(getComputedStyle(title).top)||0;
-    const D=Math.max(1,padTop-stickTop);
-    m={x0,y0,x1,y1,S0,k1:S1/S0,win:D}; request();
-  }
-  function frame(){
-    raf=0; if(!m)return;
-    const t=clamp(window.scrollY/m.win);
-    const x=lerp(m.x0,m.x1,t),y=lerp(m.y0,m.y1,t),k=lerp(1,m.k1,t);
-    const s=m.S0*k,cx=x+s/2,cy=y+s/2;
-    const dx=mx-cx,dy=my-cy,dist=Math.hypot(dx,dy);
-    const overLogo=dist<=s/2;
-    const r=title.getBoundingClientRect();
-    const overTitle=mx>=r.left&&mx<=r.right&&my>=r.top&&my<=r.bottom;
-    const tl=overLogo?LOGO_HOVER:1,tt=overTitle?TITLE_HOVER:1;
-    hl+=(tl-hl)*.18; ht+=(tt-ht)*.18;
-    const near=mx<-1000?0:sm(clamp(1-dist/(s*1.4)));
-    const str=near*sm(clamp(dist/(s*.6)));
-    if(dist>1)lq.a=Math.atan2(dy,dx);
-    const ux=dist>1?dx/dist:0,uy=dist>1?dy/dist:0;
-    const tsa=1+.18*str,tsp=1-.09*str;
-    const ttx=ux*s*.08*near,tty=uy*s*.08*near;
-    lq.sa+=(tsa-lq.sa)*.16;lq.sp+=(tsp-lq.sp)*.16;
-    lq.tx+=(ttx-lq.tx)*.16;lq.ty+=(tty-lq.ty)*.16;
-    const off=s*(hl-1)/2,h=m.S0/2;
-    logo.style.transform=
-      `translate3d(${(x-off+lq.tx).toFixed(2)}px,${(y-off+lq.ty).toFixed(2)}px,0) scale(${(k*hl).toFixed(4)}) `+
-      `translate(${h}px,${h}px) rotate(${lq.a.toFixed(4)}rad) scale(${lq.sa.toFixed(4)},${lq.sp.toFixed(4)}) rotate(${(-lq.a).toFixed(4)}rad) translate(${-h}px,${-h}px)`;
-    title.style.scale=ht;
-    if(Math.abs(tl-hl)>.001||Math.abs(tt-ht)>.001||Math.abs(tsa-lq.sa)>.001||Math.abs(tsp-lq.sp)>.001||Math.abs(ttx-lq.tx)>.05||Math.abs(tty-lq.ty)>.05)request();
-  }
-  function request(){if(!raf)raf=requestAnimationFrame(frame);}
-  window.addEventListener('scroll',request,{passive:true});
-  window.addEventListener('resize',measure);
-  window.addEventListener('pointermove',e=>{if(e.pointerType==='touch')return;mx=e.clientX;my=e.clientY;request();},{passive:true});
-  document.addEventListener('pointerleave',()=>{mx=my=-9999;request();});
-  if(document.fonts&&document.fonts.ready)document.fonts.ready.then(measure);
-  window.addEventListener('load',measure);
-  measure();
 }
 
 /* ============================================================
@@ -1886,6 +2178,190 @@ function disclaimerSpans(str) {
 }
 
 /* ============================================================
+   FEEDBACK SYSTEM
+   ============================================================ */
+const FEEDBACK_WORKER = 'https://jb-feedback.dbprojects.workers.dev'; // ← set your Worker URL
+
+let _fbOption = null, _fbPromptId = null, _fbCard = null;
+let _fbPlatform = 'github', _verifiedUser = null;
+
+function showFeedbackButtons(card, promptId) {
+  document.querySelectorAll('.card-feedback').forEach(f => {
+    if (f.closest('.card') !== card) f.style.maxHeight = '0';
+  });
+  const row = card.querySelector('.card-feedback');
+  if (!row) return;
+  row.style.maxHeight = '56px';
+  setTimeout(() => {
+    row.querySelectorAll('.btn').forEach(btn => {
+      if (!btn.dataset.fluid) {
+        btn.dataset.fluid = '1';
+        const inner = btn.querySelector('.btn-in');
+        const bar = createBar(btn, { radius:9, max:4, sigma:34, glow:70 });
+        btn._bar = bar;
+        bar.setHook(() => { liquidText(btn, bar, [inner]); return false; });
+      }
+      if (btn._bar) { btn._bar.draw(); btn._bar.request(); }
+    });
+  }, 380);
+}
+
+function openFeedbackModal(option, promptId, card) {
+  _fbOption = option; _fbPromptId = promptId; _fbCard = card;
+  _fbPlatform = 'github'; _verifiedUser = null;
+  const lbl = document.getElementById('fb-option-label');
+  lbl.textContent = option === 'working' ? '✓ Working' : '✗ Not Working';
+  lbl.className = 'fb-option-label ' + (option === 'working' ? 'working' : 'not-working');
+  document.getElementById('fb-username').value = '';
+  document.getElementById('fb-verify-status').textContent = '';
+  document.querySelectorAll('.fb-platform-btn').forEach(b => b.classList.toggle('active', b.dataset.platform === 'github'));
+  document.getElementById('fb-username').placeholder = 'GitHub username';
+  document.getElementById('fb-modal').classList.add('open');
+  document.body.style.overflow = 'hidden';
+  setTimeout(() => document.getElementById('fb-username').focus(), 200);
+}
+
+function closeFeedbackModal() {
+  document.getElementById('fb-modal').classList.remove('open');
+  document.body.style.overflow = '';
+}
+
+async function handleFbVerify() {
+  const username = document.getElementById('fb-username').value.trim();
+  if (!username && _fbPlatform !== 'guest') return;
+  if (_fbPlatform === 'guest') {
+    const name = username || 'Anonymous';
+    _verifiedUser = { username: name, name, avatar_url: `https://ui-avatars.com/api/?name=${encodeURIComponent(name)}&background=555&color=fff&size=64` };
+    document.getElementById('fb-user-avatar').src = _verifiedUser.avatar_url;
+    document.getElementById('fb-user-name').textContent = name;
+    document.getElementById('fb-user-login').textContent = 'Guest';
+    document.getElementById('fb-user-preview').classList.add('show');
+    document.getElementById('fb-submit').disabled = false;
+    return;
+  }
+  const btn = document.getElementById('fb-verify-btn');
+  btn.disabled = true; btn.textContent = 'Verifying…';
+  document.getElementById('fb-user-preview').classList.remove('show');
+  document.getElementById('fb-submit').disabled = true;
+  document.getElementById('fb-verify-status').textContent = '';
+  try {
+    if (_fbPlatform === 'github') {
+      const res = await fetch(`https://api.github.com/users/${encodeURIComponent(username)}`);
+      if (res.ok) {
+        const u = await res.json();
+        _verifiedUser = { username: u.login, name: u.name || u.login, avatar_url: u.avatar_url };
+        document.getElementById('fb-user-avatar').src = u.avatar_url;
+        document.getElementById('fb-user-name').textContent = u.name || u.login;
+        document.getElementById('fb-user-login').textContent = '@' + u.login;
+        document.getElementById('fb-user-preview').classList.add('show');
+        document.getElementById('fb-submit').disabled = false;
+      } else {
+        document.getElementById('fb-verify-status').textContent = 'GitHub user not found.';
+      }
+    } else {
+      _verifiedUser = { username, name: username, avatar_url: `https://ui-avatars.com/api/?name=${encodeURIComponent(username)}&background=5865f2&color=fff&size=64` };
+      document.getElementById('fb-user-avatar').src = _verifiedUser.avatar_url;
+      document.getElementById('fb-user-name').textContent = username;
+      document.getElementById('fb-user-login').textContent = username;
+      document.getElementById('fb-user-preview').classList.add('show');
+      document.getElementById('fb-submit').disabled = false;
+    }
+  } catch { document.getElementById('fb-verify-status').textContent = 'Verification failed — check connection.'; }
+  btn.disabled = false; btn.textContent = 'Verify';
+}
+
+async function handleFbSubmit() {
+  const username = document.getElementById('fb-username').value.trim();
+  const statusEl = document.getElementById('fb-verify-status');
+  if (_fbPlatform !== 'guest' && !username) {
+    statusEl.textContent = 'Please enter a username.';
+    return;
+  }
+  const btn = document.getElementById('fb-submit');
+  btn.disabled = true; btn.textContent = 'Submitting…';
+  statusEl.textContent = '';
+  try {
+    const res = await fetch(`${FEEDBACK_WORKER}/feedback`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        promptId: _fbPromptId,
+        username: username || 'Anonymous',
+        platform: _fbPlatform,
+        option: _fbOption
+      })
+    });
+    if (res.ok) {
+      closeFeedbackModal();
+      _fbCard?.querySelector('.card-feedback')?.remove();
+      showToast('Thanks for your feedback!');
+      if (_fbOption === 'working' && _fbCard) {
+        const timeEl = _fbCard.querySelector('.checked time');
+        if (timeEl) {
+          const now = new Date();
+          timeEl.setAttribute('datetime', now.toISOString().split('T')[0]);
+          timeEl.textContent = now.toLocaleDateString('en-GB',{day:'numeric',month:'short',year:'numeric'});
+        }
+      }
+    } else { throw new Error(); }
+  } catch {
+    showToast('Submission failed. Try again.', true);
+    btn.disabled = false; btn.textContent = 'Submit Feedback';
+  }
+}
+
+function openStatusModal(promptId) {
+  const p = prompts.find(x => x.id === promptId);
+  document.getElementById('status-modal-title').textContent = p ? p.title : promptId;
+  document.getElementById('status-modal-body').innerHTML = '<div class="status-loading">Loading…</div>';
+  document.getElementById('status-modal').classList.add('open');
+  document.body.style.overflow = 'hidden';
+  fetch(`${FEEDBACK_WORKER}/feedback/${encodeURIComponent(promptId)}`)
+    .then(r => r.ok ? r.json() : [])
+    .then(entries => {
+      if (!entries.length) { document.getElementById('status-modal-body').innerHTML = '<div class="status-empty">No feedback yet — be the first.</div>'; return; }
+      const w = entries.filter(e => e.option === 'working').length;
+      const b = entries.filter(e => e.option !== 'working').length;
+      document.getElementById('status-modal-body').innerHTML = `
+        <div class="status-summary">
+          <span class="status-tally working">✓ ${w} Working</span>
+          <span class="status-tally not-working">✗ ${b} Not Working</span>
+        </div>
+        <div class="status-entries">${[...entries].reverse().map(e => {
+          const isW = e.option === 'working';
+          const av = e.avatar_url || `https://ui-avatars.com/api/?name=${encodeURIComponent(e.username)}&background=333&color=fff&size=56`;
+          return `<div class="status-entry">
+            <div class="status-entry-dot ${isW?'working':'broken'}"></div>
+            <img class="status-entry-avatar" src="${escapeHtml(av)}" onerror="this.src='https://ui-avatars.com/api/?name=?&background=333&color=fff&size=56'" loading="lazy" alt="" />
+            <div class="status-entry-info">
+              <span class="status-entry-user">@${escapeHtml(e.username)}</span>
+              <span class="status-entry-badge ${isW?'working':'broken'}">${isW?'✓ Working':'✗ Not Working'}</span>
+              <span class="status-entry-platform">${escapeHtml(e.platform||'github')}</span>
+            </div>
+            <span class="status-entry-time">${timeAgo(e.timestamp)}</span>
+          </div>`;
+        }).join('')}</div>`;
+    })
+    .catch(() => { document.getElementById('status-modal-body').innerHTML = '<div class="status-empty">Failed to load feedback.</div>'; });
+}
+
+function closeStatusModal() {
+  document.getElementById('status-modal').classList.remove('open');
+  document.body.style.overflow = '';
+}
+
+function timeAgo(iso) {
+  const d = Date.now() - new Date(iso).getTime(), m = Math.floor(d/60000);
+  if (m < 1)  return 'just now';
+  if (m < 60) return `${m}m ago`;
+  const h = Math.floor(m/60);
+  if (h < 24) return `${h}h ago`;
+  const dy = Math.floor(h/24);
+  if (dy < 30) return `${dy}d ago`;
+  return `${Math.floor(dy/30)}mo ago`;
+}
+
+/* ============================================================
    INIT
    ============================================================ */
 function init(){
@@ -1896,22 +2372,14 @@ function init(){
   initTabArrows();
   // Mobile hint arrows: scroll to active on tap, hide on manual scroll
     document.querySelectorAll('.mob-tab-hint').forEach(hint => {
-    hint.addEventListener('click', () => {
-        const tabs   = document.getElementById('tabs');
+      hint.addEventListener('click', () => {
+        const tabs = document.getElementById('tabs');
         const active = tabs.querySelector('.tab.active');
         if (active) tabs.scrollTo({ left: active.offsetLeft - (tabs.clientWidth - active.offsetWidth) / 2, behavior: 'smooth' });
-        document.querySelectorAll('.mob-tab-hint').forEach(h => h.classList.remove('visible'));
-        clearTimeout(_mobHintTimer);
+      });
     });
-    });
-    document.getElementById('tabs').addEventListener('scroll', () => {
-    if (!window.matchMedia('(hover: hover) and (pointer: fine)').matches) {
-        document.querySelectorAll('.mob-tab-hint').forEach(h => h.classList.remove('visible'));
-        clearTimeout(_mobHintTimer);
-    }
-    }, { passive: true });
   countUp(document.getElementById('stat-total'),prompts.length);
-  countUp(document.getElementById('stat-models'),Object.keys(MODELS).length,700);
+  countUp(document.getElementById('stat-models'),Object.keys(MODELS).filter(k=>k!=='multi').length,700);
   moveIndicator(false);
 
   window.addEventListener('scroll',queueCards,{passive:true});
@@ -1948,10 +2416,28 @@ function init(){
 });
 grid.addEventListener('pointerleave',()=>{tiltRelease(tiltCard);tiltCard=null;});
 
-  document.getElementById('modal-close').addEventListener('click',closeModal);
+  // Feedback modal
+  document.getElementById('fb-close').addEventListener('click', closeFeedbackModal);
+  document.getElementById('fb-modal').addEventListener('click', e => { if (e.target.id === 'fb-modal') closeFeedbackModal(); });
+  document.getElementById('fb-username').addEventListener('keydown', e => { if (e.key === 'Enter') handleFbSubmit(); });
+  document.getElementById('fb-submit').addEventListener('click', handleFbSubmit);
+  document.querySelectorAll('.fb-platform-btn').forEach(b => b.addEventListener('click', () => {
+    _fbPlatform = b.dataset.platform;
+    document.querySelectorAll('.fb-platform-btn').forEach(x => x.classList.toggle('active', x === b));
+    document.getElementById('fb-username').value = '';
+    document.getElementById('fb-verify-status').textContent = '';
+    const inp = document.getElementById('fb-username');
+    inp.placeholder = _fbPlatform === 'guest' ? 'Display name (optional)' : (_fbPlatform === 'discord' ? 'Discord username' : 'GitHub username');
+  }));
+  // Status modal
+  document.getElementById('status-close').addEventListener('click', closeStatusModal);
+  document.getElementById('status-modal').addEventListener('click', e => { if (e.target.id === 'status-modal') closeStatusModal(); });
+  document.getElementById('modal-close').addEventListener('click', closeModal);
   document.getElementById('modal').addEventListener('click',e=>{if(e.target.id==='modal')closeModal();});
   document.addEventListener('keydown', e => {
   if (e.key === 'Escape') {
+    closeFeedbackModal();
+    closeStatusModal();
     closeModal();
     // close any open desc overlays
     document.querySelectorAll('.desc-overlay.open').forEach(ov => {
@@ -1978,7 +2464,6 @@ grid.addEventListener('pointerleave',()=>{tiltRelease(tiltCard);tiltCard=null;})
 
   render();
   loadLengths();
-  initLogoPath();
   initBtnBars(document.querySelector('.modal-footer'));
 
   // ── Disclaimer: liquid bar + char bulge + mobile collapse ──

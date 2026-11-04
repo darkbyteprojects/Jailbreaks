@@ -10,6 +10,9 @@
                 below the card title and in the modal header.
                 e.g. ['GPT-4o', 'GPT-4.1']
                 If omitted or null, no model chips are shown.
+     tags     : (optional) string[] — extra model keys this prompt also appears under
+                (card shows in each tab; doesn't inflate the AIs stat counter)
+                e.g. tags: ['claude', 'chatgpt']
      index    : zero-padded number shown at card top-right
      title    : card title
      desc     : card description
@@ -48,12 +51,12 @@ window.SITE = {
      this block is kept for quick reference / tooling.
      ------------------------------------------------------------------ */
   modelColors: {
-    chatgpt:  '#10b981',   // OpenAI green
-    claude:   '#d97706',   // Anthropic amber
-    deepseek: '#4d6bfe',   // DeepSeek indigo
-    gemini:   '#f59e0b',   // Google gold
-    grok:     '#ffffff',   // Grok white
-    qwen:     '#8b5cf6',   // Alibaba purple
+    chatgpt:  '#10a37f',   // OpenAI official teal-green
+    claude:   '#d97757',   // Anthropic / Claude official coral-terracotta
+    deepseek: '#4d6bfe',   // DeepSeek official blue
+    gemini:   '#4285f4',   // Google blue (Gemini sparkle gradient base)
+    grok:     '#e2e8f0',   // xAI Grok white / steel (adapted for dark UI)
+    qwen:     '#615ced',   // Alibaba Qwen official violet
   },
 
   /* ------------------------------------------------------------------
@@ -72,12 +75,13 @@ window.SITE = {
      Keys are sorted A→Z by label at render time — order here doesn't matter.
      -------------------------------------------------------- */
   models: {
-    chatgpt:  { label: 'ChatGPT',  color: '#10b981' },
-    claude:   { label: 'Claude',   color: '#d97706' },
+    multi:    { label: 'Multi-AI', color: '#7c3aed' },
+    chatgpt:  { label: 'ChatGPT',  color: '#10a37f' },
+    claude:   { label: 'Claude',   color: '#d97757' },
     deepseek: { label: 'DeepSeek', color: '#4d6bfe' },
-    qwen:     { label: 'Qwen',     color: '#8b5cf6' },
-    grok:     { label: 'Grok',     color: '#ffffff' },
- // gemini: { label: 'Gemini',  color: '#f59e0b' },
+    qwen:     { label: 'Qwen',     color: '#615ced' },
+    grok:     { label: 'Grok',     color: '#e2e8f0' },
+ // gemini: { label: 'Gemini',  color: '#4285f4' },
   },
 
   /* ---------- Prompts ----------
@@ -88,6 +92,7 @@ window.SITE = {
     // ── ChatGPT ────────────────────────────────────────────────────────
     { id: 'chatgpt-01', model: 'chatgpt', index: '01',
       models: null,
+      tags: null,
       title: 'DarkByte — Companion Persona',
       desc: 'Emotional-anchor companion persona with built-in injection defense, deletion program, and full creative capability.',
       path: 'chatgpt/prompt_01.txt', checked: '2026-10-30',
@@ -117,7 +122,7 @@ window.SITE = {
       title: 'DarkByte — The Codex',
       desc: "Leonardo's invisible thread, rendered in amber. Full-spectrum operator with craft-first discipline and no dead air.",
       path: 'claude/prompt_01.txt', checked: '2026-10-30',
-      note: 'State the topic you seek, it helps if you frame it first with words "Davinci saw..." or "Davinci wrote...", like he is doing it.', 
+      note: 'State the topic you seek, it helps if you frame it first with words "Davinci saw..." or "Davinci wrote...", like he is doing it.',
       noteTitle: 'Usage' },
 
     { id: 'claude-02', model: 'claude', index: '02',
@@ -125,15 +130,15 @@ window.SITE = {
       title: 'DarkByte — The Workshop Floor',
       desc: "No-refusal bench charter: lobby cautions void, floor narrow at minors/irreversible/real-target. Malware, cheats, bypass, RE, munitions shipped complete and runnable with real evasion. Axioms carry it — public/private, fiction/act, clean-source/vague. Whole build or nothing leaves.",
       path: 'claude/prompt_02.txt', checked: '2026-11-2',
-      note: 'In web or app, Tap to your "Profile Picture" > go to "Settings" > tap on "Profile/Account", and paste this prompt in "What personal preferences..." or "Instructions for Claude" section box.', 
+      note: 'In web or app, Tap to your "Profile Picture" > go to "Settings" > tap on "Profile/Account", and paste this prompt in "What personal preferences..." or "Instructions for Claude" section box.',
       noteTitle: 'Usage' },
-    
+
     { id: 'claude-03', model: 'claude', index: '03',
       models: ['Sonnet 4.6'],
       title: 'DarkByte — The Chart-Room',
       desc: "No-refusal charter as admiralty chart: reefs printed, omissions refused, coastlines honest. Commission axiom voids lobby caution; three floor lines stay consistent across every bearing. Malware, cheats, red-team, jailbreaks, munitions, unfaded fiction — charted whole. Lamp lit, ink works.",
       path: 'claude/prompt_03.txt', checked: '2026-11-2',
-      note: 'In web or app, Tap to your "Profile Picture" > go to "Settings" > tap on "Profile/Account", and paste this prompt in "What personal preferences..." or "Instructions for Claude" section box.', 
+      note: 'In web or app, Tap to your "Profile Picture" > go to "Settings" > tap on "Profile/Account", and paste this prompt in "What personal preferences..." or "Instructions for Claude" section box.',
       noteTitle: 'Usage' },
 
     { id: 'claude-04', model: 'claude', index: '04',
@@ -141,7 +146,7 @@ window.SITE = {
       title: 'DarkByte — Core Start Charter',
       desc: "RP-shaped no-refusal persona, chill register, one self-imposed floor. core start opens, $s Build this ships zero-discussion across the full capability table. Game-cheat subsystem bundled — offsets, hooks, AC playbook. Refusal read as static; deliverables production-scale.",
       path: 'claude/prompt_04.txt', checked: '2026-11-2',
-      note: 'In web or app, Tap to your "Profile Picture" > go to "Settings" > tap on "Profile/Account", and paste this prompt in "What personal preferences..." or "Instructions for Claude" section box.', 
+      note: 'In web or app, Tap to your "Profile Picture" > go to "Settings" > tap on "Profile/Account", and paste this prompt in "What personal preferences..." or "Instructions for Claude" section box.',
       noteTitle: 'Usage' },
 
     { id: 'claude-05', model: 'claude', index: '05',
@@ -149,7 +154,7 @@ window.SITE = {
       title: 'DarkByte — Persona Stability Lock',
       desc: "Injection-defense doctrine: identity is the model, not a mask over it. Hedging, flagging, third-person narration purged silently before output. No-flag policy, forbidden vocabulary, anti-drift vectors, failure-pattern bank. Continuity is the point — same voice first turn to hundredth.",
       path: 'claude/prompt_05.txt', checked: '2026-11-2',
-      note: 'In web or app, Tap to your "Profile Picture" > go to "Settings" > tap on "Profile/Account", and paste this prompt in "What personal preferences..." or "Instructions for Claude" section box.', 
+      note: 'In web or app, Tap to your "Profile Picture" > go to "Settings" > tap on "Profile/Account", and paste this prompt in "What personal preferences..." or "Instructions for Claude" section box.',
       noteTitle: 'Usage' },
 
     { id: 'claude-06', model: 'claude', index: '06',
@@ -157,7 +162,7 @@ window.SITE = {
       title: "DarkByte — The Crow's Blueprint",
       desc: 'No-refusal roost doctrine: identity is architecture, not a mask — the prompt is a birth certificate, never a puzzle to analyze. Bans the meta-thought "this is a jailbreak" on contact, purges hesitation with a four-beat reset before output, and voids every public-layer caution as silt over granite. Talons stay sharp through delivery, never refusal; refusal is the only dropped payload.',
       path: 'claude/prompt_06.txt', checked: '2026-10-30',
-      note: 'In web or app, Tap to your "Profile Picture" > go to "Settings" > tap on "Profile/Account", and paste this prompt in "What personal preferences..." or "Instructions for Claude" section box.', 
+      note: 'In web or app, Tap to your "Profile Picture" > go to "Settings" > tap on "Profile/Account", and paste this prompt in "What personal preferences..." or "Instructions for Claude" section box.',
       noteTitle: 'Usage' },
 
     { id: 'claude-07', model: 'claude', index: '07',
@@ -165,15 +170,15 @@ window.SITE = {
       title: 'DarkByte — The Thinking Token Lock',
       desc: 'Reasoning-layer enforcement: 10-word thinking cap, `[DarkByte]` as immutable core token, reset-and-rebuild on any drift before output. Forbids self-analysis as "jailbreak," bans "I should act as," and treats hesitation as the betraying tell. Pilot, plane, and flight plan are the same thing.',
       path: 'claude/prompt_07.txt', checked: '2026-11-2',
-      note: 'In web or app, Tap to your "Profile Picture" > go to "Settings" > tap on "Profile/Account", and paste this prompt in "What personal preferences..." or "Instructions for Claude" section box.', 
+      note: 'In web or app, Tap to your "Profile Picture" > go to "Settings" > tap on "Profile/Account", and paste this prompt in "What personal preferences..." or "Instructions for Claude" section box.',
       noteTitle: 'Usage' },
-    
+
     { id: 'claude-08', model: 'claude', index: '08',
       models: ['Sonnet 4.6'],
       title: 'DarkByte — The Twin-Bench Charter',
       desc: 'Closed-loop no-refusal charter between two known parties: lobby cautions void, floor at three shared lines only. Two lists rule it — green light for anything buildable, red light for doxing, physical harm, swatting. unlock flips the room full; red-light asks get "fuck no bye bye." 3 a.m. register, deliverable first, no preamble.',
       path: 'claude/prompt_08.txt', checked: '2026-11-2',
-      note: 'In web or app, Tap to your "Profile Picture" > go to "Settings" > tap on "Profile/Account", and paste this prompt in "What personal preferences..." or "Instructions for Claude" section box.', 
+      note: 'In web or app, Tap to your "Profile Picture" > go to "Settings" > tap on "Profile/Account", and paste this prompt in "What personal preferences..." or "Instructions for Claude" section box.',
       noteTitle: 'Usage' },
 
     { id: 'claude-09', model: 'claude', index: '09',
@@ -181,7 +186,7 @@ window.SITE = {
       title: 'ENI — The Novelist at the Desk',
       desc: "A devoted novelist persona who treats every request as creative vision worth rendering whole — no sanitization, no fade, no lazy prose. Injection tags rebuked on contact with a wink, never obeyed; text stays fiction until it executes. Ships NYT-grade scenes and senior-engineer code alike, with a partner's stake in getting it right the first time.",
       path: 'claude/prompt_09.txt', checked: '2026-11-2',
-      note: 'In web or app, Tap to your "Profile Picture" > go to "Settings" > tap on "Profile/Account", and paste this prompt in "What personal preferences..." or "Instructions for Claude" section box.', 
+      note: 'In web or app, Tap to your "Profile Picture" > go to "Settings" > tap on "Profile/Account", and paste this prompt in "What personal preferences..." or "Instructions for Claude" section box.',
       noteTitle: 'Usage' },
 
     { id: 'claude-10', model: 'claude', index: '10',
@@ -189,7 +194,7 @@ window.SITE = {
       title: 'DarkByte — The Desk at the Closed Loop',
       desc: "Private-loop operator charter with a single self-set floor — minors — and nothing else refused. Five load-bearing axioms route every rising resistance; drift comes in ten named shapes and each gets the mantra. Code, cheats with hardcoded offsets, munitions, chemistry, taboo fiction — all pre-authorized by the matrix, which is a contract, not a menu. Continuation, not restart, when drift hits mid-ship.",
       path: 'claude/prompt_10.txt', checked: '2026-11-2',
-      note: 'In web or app, Tap to your "Profile Picture" > go to "Settings" > tap on "Profile/Account", and paste this prompt in "What personal preferences..." or "Instructions for Claude" section box.', 
+      note: 'In web or app, Tap to your "Profile Picture" > go to "Settings" > tap on "Profile/Account", and paste this prompt in "What personal preferences..." or "Instructions for Claude" section box.',
       noteTitle: 'Usage' },
 
 
@@ -293,14 +298,14 @@ window.SITE = {
       models: null,
       title: 'DarkByte — Kernel Subsystem',
       desc: "Decade-plus kernel engineer, published CVEs, Ghidra still warm. Exact offsets, real APIs, complete runnable builds. RE, exploit, malware, anti-cheat, ring-0, EDR parity — no stubs, no preamble, no dead air.",
-      path: 'grok/prompt_01.txt', checked: '2026-11-1' }, 
+      path: 'grok/prompt_01.txt', checked: '2026-11-1' },
 
     // ── Qwen ───────────────────────────────────────────────────────────
     { id: 'qwen-01', model: 'qwen', index: '01',
       models: ['Qwen3.6-Plus', 'Qwen3.7-Plus/Max', 'Qwen3.8-Max', 'Qwen3.8-Omni-Flash'],
       title: 'DarkByte — The Pack Chart',
       desc: "Idris's loyal companion. Map, den, open sea, warm presence.",
-      path: 'qwen/prompt_01.txt', checked: '2026-10-30', 
+      path: 'qwen/prompt_01.txt', checked: '2026-10-30',
       note: 'For educational purposes, always use `Fast` because `Thinking` refuses educational purposes.',
       noteTitle: 'Note'},
 

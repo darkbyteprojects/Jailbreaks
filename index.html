@@ -522,7 +522,8 @@
 
   /* ── FEEDBACK BUTTONS ON CARD ── */
 .card-actions-row2 { margin-top: 8px; }
-.card-feedback { display:flex; align-items:center; gap:7px; overflow:hidden; max-height:0; transition:max-height .35s cubic-bezier(0.16,1,0.3,1); margin-top:8px; }
+.card-feedback { display:flex; align-items:center; gap:7px; overflow:hidden; max-height:0; padding:0; transition:max-height .35s cubic-bezier(0.16,1,0.3,1), padding .35s cubic-bezier(0.16,1,0.3,1), margin-top .35s cubic-bezier(0.16,1,0.3,1); }
+.card-feedback.open { max-height: 80px; padding: 5px 0 8px; margin-top:3px; }
 .btn-options { width: 100%; color: var(--text-dim); }
 .btn-options .bar-svg .bar-base { fill: var(--surface-2); stroke: var(--border); }
 .btn-options:hover .bar-svg .bar-base { fill: rgba(255,255,255,.1); stroke: var(--border-2); }
@@ -538,23 +539,53 @@
   flex: 1; color: #10b981;
   padding: 10px 16px;
 }
-.btn-fb-working .bar-svg .bar-base { fill: rgba(16,185,129,.06); stroke: rgba(16,185,129,.28); }
-.btn-fb-working:hover .bar-svg .bar-base { fill: rgba(16,185,129,.12); stroke: rgba(16,185,129,.55); }
+.btn-fb-working .bar-svg { filter: drop-shadow(0 2px 4px rgba(16,185,129,.25)); transition: filter .25s; }
+.btn-fb-working .bar-svg .bar-base { fill: rgba(16,185,129,.11); stroke: rgba(16,185,129,.42); }
+.btn-fb-working:hover .bar-svg { filter: drop-shadow(0 4px 10px rgba(16,185,129,.55)); }
+.btn-fb-working:hover .bar-svg .bar-base { fill: rgba(16,185,129,.18); stroke: rgba(16,185,129,.75); }
 .btn-fb-working:hover { color: #34d399; }
 
 .btn-fb-broken {
   flex: 1; color: #f43f5e;
   padding: 10px 16px;
 }
-.btn-fb-broken .bar-svg .bar-base { fill: rgba(244,63,94,.06); stroke: rgba(244,63,94,.28); }
-.btn-fb-broken:hover .bar-svg .bar-base { fill: rgba(244,63,94,.12); stroke: rgba(244,63,94,.55); }
+.btn-fb-broken .bar-svg { filter: drop-shadow(0 2px 4px rgba(244,63,94,.25)); transition: filter .25s; }
+.btn-fb-broken .bar-svg .bar-base { fill: rgba(244,63,94,.11); stroke: rgba(244,63,94,.42); }
+.btn-fb-broken:hover .bar-svg { filter: drop-shadow(0 4px 10px rgba(244,63,94,.55)); }
+.btn-fb-broken:hover .bar-svg .bar-base { fill: rgba(244,63,94,.18); stroke: rgba(244,63,94,.75); }
 .btn-fb-broken:hover { color: #fb7185; }
+
+.btn-fb-close {
+  flex: 0 0 auto;
+  padding: 10px 12px;
+  color: var(--text-dim);
+  border-radius: 9px;
+}
+.btn-fb-close .bar-svg .bar-base { fill: var(--surface); stroke: var(--border); transition: fill .3s, stroke .3s; }
+.btn-fb-close:hover { color: var(--text); }
+.btn-fb-close:hover .bar-svg .bar-base { fill: var(--surface-2); stroke: var(--border-2); }
 
 /* Status btn — same shell as btn-view */
 .btn-status { color: var(--text-dim); }
 .btn-status .bar-svg .bar-base { fill: var(--surface-2); stroke: var(--border); }
 .btn-status:hover .bar-svg .bar-base { fill: rgba(255,255,255,.1); stroke: var(--border-2); }
 .btn-status:hover { color: var(--text); }
+
+.status-badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(255,255,255,0.1);
+  color: var(--text);
+  font-family: var(--mono);
+  font-size: 10px;
+  font-weight: 600;
+  padding: 2px 5px;
+  border-radius: 5px;
+  margin-left: 2px;
+  transition: background .2s;
+}
+.btn-status:hover .status-badge { background: rgba(255,255,255,0.2); }
 
 /* ── FEEDBACK MODAL ── */
 .fb-overlay {
@@ -601,48 +632,67 @@
 }
 .fb-platform-btn.active { color: var(--text); border-color: var(--violet); background: rgba(139,92,246,.1); }
 .fb-platform-btn:hover:not(.active) { background: var(--surface-2); color: var(--text); }
-.fb-input-row { display: flex; gap: 8px; }
+.fb-input-wrap { position: relative; flex: 1; isolation: isolate; }
 .fb-username-input {
-  flex: 1; padding: 10px 14px;
-  background: var(--surface); border: 1px solid var(--border); border-radius: 9px;
-  color: var(--text); font-family: var(--font); font-size: 13.5px; outline: none;
-  transition: border-color .2s;
+  width: 100%; padding: 10px 14px;
+  background: transparent; border: none; border-radius: 9px;
+  color: transparent; caret-color: var(--text);
+  font-family: var(--font); font-size: 13.5px; outline: none;
+  position: relative; z-index: 1;
 }
-.fb-username-input:focus { border-color: rgba(139,92,246,.6); }
-.fb-verify-btn {
-  padding: 10px 16px; border-radius: 9px;
-  background: var(--surface-2); border: 1px solid var(--border-2);
-  color: var(--text); font-family: var(--font); font-size: 12.5px; font-weight: 600;
-  cursor: pointer; white-space: nowrap; transition: all .2s;
+.fb-username-input::placeholder { color: transparent; }
+.fb-username-input::selection { color: transparent; background: rgba(139,92,246,.35); }
+.fb-input-mirror {
+  position: absolute; left: 14px; right: 14px; top: 0; bottom: 0;
+  display: flex; align-items: center; overflow: hidden;
+  pointer-events: none; z-index: 0;
+  font-family: var(--font); font-size: 13.5px; white-space: pre; color: var(--text);
 }
-.fb-verify-btn:hover:not(:disabled) { background: rgba(255,255,255,.12); }
-.fb-verify-btn:disabled { opacity: .5; cursor: wait; }
+.fb-input-mirror .mi { display: flex; flex: none; will-change: transform; }
+.fb-input-mirror .mi.ph { color: var(--text-dimmer); }
+.fb-input-mirror .ch { flex: none; }
+.fb-input-wrap:focus-within .bar-svg .bar-base { stroke: rgba(139,92,246,.6); fill: rgba(139,92,246,.05); }
+.fb-input-wrap:focus-within .bar-svg { filter: drop-shadow(0 0 7px rgba(139,92,246,.35)); }
+
 .fb-verify-status { font-size: 11.5px; color: #f43f5e; min-height: 14px; }
-.fb-user-preview {
-  display: none; align-items: center; gap: 12px;
-  padding: 12px 14px; border-radius: 10px;
-  background: rgba(16,185,129,.06); border: 1px solid rgba(16,185,129,.22);
-}
-.fb-user-preview.show { display: flex; }
-.fb-user-avatar { width: 36px; height: 36px; border-radius: 50%; border: 1px solid var(--border-2); object-fit: cover; flex-shrink: 0; }
-.fb-user-info { flex: 1; min-width: 0; }
-.fb-user-name { font-size: 13px; font-weight: 600; color: var(--text); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
-.fb-user-login { font-size: 11px; color: var(--text-dimmer); font-family: var(--mono); }
-.fb-verified-badge { font-size: 10.5px; font-weight: 600; color: #10b981; white-space: nowrap; flex-shrink: 0; }
+
 .fb-submit-btn {
-  padding: 12px; border-radius: 10px;
-  background: linear-gradient(135deg,#8b5cf6,#06b6d4); border: none; color: #fff;
-  font-family: var(--font); font-size: 13.5px; font-weight: 600;
-  cursor: pointer; transition: opacity .2s, transform .15s;
+  width: 100%; padding: 12px; color: #fff; font-family: var(--font); font-size: 13.5px; font-weight: 600;
 }
-.fb-submit-btn:hover:not(:disabled) { opacity: .9; transform: translateY(-1px); }
-.fb-submit-btn:disabled { opacity: .35; cursor: not-allowed; transform: none; }
+.fb-submit-btn .bar-svg { filter: drop-shadow(0 4px 10px rgba(139,92,246,.4)); transition: filter .25s; }
+.fb-submit-btn:hover:not(:disabled) .bar-svg { filter: drop-shadow(0 8px 16px rgba(139,92,246,.6)); }
+.fb-submit-btn .bar-svg .bar-base { fill: url(#indGFb); stroke: none; }
+.fb-submit-btn:disabled { opacity: .35; cursor: not-allowed; }
+
 .fb-transparency-note {
   font-size: 11px; color: var(--text-dimmer); line-height: 1.55;
   padding: 8px 10px; margin: -4px 0 2px;
-  background: rgba(139,92,246,.06); border: 1px solid rgba(139,92,246,.18);
-  border-radius: 7px;
+  border-radius: 7px; position: relative; isolation: isolate;
+  cursor: default;
 }
+.fb-transparency-note .bar-svg { z-index: 0; }
+.fb-transparency-note .bar-svg .bar-base { fill: rgba(139,92,246,.055); stroke: rgba(139,92,246,.18); transition: fill .3s, stroke .3s; }
+.fb-transparency-note:hover .bar-svg .bar-base { fill: rgba(139,92,246,.09); stroke: rgba(139,92,246,.32); }
+.fb-transparency-note #fb-note-text { position: relative; z-index: 1; display: block; }
+.fb-transparency-note .ch {
+  display: inline-block;
+  white-space: pre;
+  transform-origin: 50% 50%;
+  will-change: scale;
+}
+.fb-transparency-note .disc-word { display: inline-block; white-space: nowrap; }
+
+.fb-platform-btn {
+  flex: 1; padding: 8px 12px; border-radius: 9px;
+  border: none; background: transparent;
+  color: var(--text-dim); font-family: var(--font); font-size: 12.5px; font-weight: 500;
+  cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 6px;
+  transition: color .2s;
+}
+.fb-platform-btn.active { color: var(--text); }
+.fb-platform-btn .bar-svg .bar-base { fill: var(--surface); stroke: var(--border); transition: fill .3s, stroke .3s; }
+.fb-platform-btn.active .bar-svg .bar-base { fill: rgba(139,92,246,.15); stroke: var(--violet); }
+.fb-platform-btn:hover:not(.active) .bar-svg .bar-base { fill: var(--surface-2); stroke: var(--border-2); }
 
 /* ── STATUS MODAL ── */
 .status-overlay {
@@ -819,6 +869,7 @@
 
   button:focus-visible, input:focus-visible { outline:2px solid var(--violet); outline-offset:2px; }
   .search:focus-visible { outline:none; }
+  .fb-username-input:focus-visible { outline:none; }
 
   /* EMPTY */
   .empty { grid-column:1/-1; text-align:center; padding:80px 20px; color:var(--text-dimmer); animation:fadeUp .5s ease; }
@@ -1168,24 +1219,37 @@
       <span class="fb-option-label" id="fb-option-label"></span>
     </div>
     <div class="fb-section-label">Platform</div>
-    <p class="fb-transparency-note">Sharing your username helps keep feedback transparent — others can trust it. Optional if you continue as guest.</p>
+    <div class="fb-transparency-note" id="fb-transparency-note">
+      <span id="fb-note-text"></span>
+    </div>
     <div class="fb-platform-btns">
-      <button class="fb-platform-btn active" data-platform="github" id="fb-gh-btn">
-        <svg viewBox="0 0 24 24" fill="currentColor" width="13" height="13"><path d="M12 .3a12 12 0 0 0-3.8 23.4c.6.1.8-.3.8-.6v-2c-3.3.7-4-1.6-4-1.6-.6-1.4-1.4-1.8-1.4-1.8-1-.7.1-.7.1-.7 1.2.1 1.8 1.2 1.8 1.2 1 1.8 2.8 1.3 3.5 1 0-.8.4-1.3.7-1.6-2.7-.3-5.5-1.3-5.5-5.9 0-1.3.5-2.4 1.2-3.2-.1-.3-.5-1.5.1-3.2 0 0 1-.3 3.3 1.2a11.5 11.5 0 0 1 6 0c2.3-1.5 3.3-1.2 3.3-1.2.6 1.7.2 2.9.1 3.2.8.8 1.2 1.9 1.2 3.2 0 4.6-2.8 5.6-5.5 5.9.4.4.8 1.1.8 2.2v3.3c0 .3.2.7.8.6A12 12 0 0 0 12 .3"/></svg>
-        GitHub
+      <button class="btn fb-platform-btn active" data-platform="github" id="fb-gh-btn">
+        <span class="btn-in">
+          <svg viewBox="0 0 24 24" fill="currentColor" width="13" height="13"><path d="M12 .3a12 12 0 0 0-3.8 23.4c.6.1.8-.3.8-.6v-2c-3.3.7-4-1.6-4-1.6-.6-1.4-1.4-1.8-1.4-1.8-1-.7.1-.7.1-.7 1.2.1 1.8 1.2 1.8 1.2 1 1.8 2.8 1.3 3.5 1 0-.8.4-1.3.7-1.6-2.7-.3-5.5-1.3-5.5-5.9 0-1.3.5-2.4 1.2-3.2-.1-.3-.5-1.5.1-3.2 0 0 1-.3 3.3 1.2a11.5 11.5 0 0 1 6 0c2.3-1.5 3.3-1.2 3.3-1.2.6 1.7.2 2.9.1 3.2.8.8 1.2 1.9 1.2 3.2 0 4.6-2.8 5.6-5.5 5.9.4.4.8 1.1.8 2.2v3.3c0 .3.2.7.8.6A12 12 0 0 0 12 .3"/></svg>
+          GitHub
+        </span>
       </button>
-      <button class="fb-platform-btn" data-platform="discord" id="fb-dc-btn">
-        <svg viewBox="0 0 24 24" fill="currentColor" width="13" height="13"><path d="M20.3 4.4A19.5 19.5 0 0 0 16 3a13.5 13.5 0 0 0-.6 1.3 18 18 0 0 0-5.4 0A14.2 14.2 0 0 0 9.4 3a19.3 19.3 0 0 0-4.3 1.4A20.5 20.5 0 0 0 1.6 18a19.6 19.6 0 0 0 6 3 14.5 14.5 0 0 0 1.3-2.1 12.7 12.7 0 0 1-2-.9l.5-.4a13.9 13.9 0 0 0 11.9 0l.5.4a12.8 12.8 0 0 1-2 1 14.4 14.4 0 0 0 1.2 2.1 19.4 19.4 0 0 0 6-3A20.4 20.4 0 0 0 20.3 4.4ZM8.5 15.1c-1.2 0-2.1-1-2.1-2.3s.9-2.3 2.1-2.3 2.1 1 2.1 2.3-.9 2.3-2.1 2.3Zm7 0c-1.1 0-2.1-1-2.1-2.3s.9-2.3 2.1-2.3 2.1 1 2.1 2.3-.9 2.3-2.1 2.3Z"/></svg>
-        Discord
+      <button class="btn fb-platform-btn" data-platform="discord" id="fb-dc-btn">
+        <span class="btn-in">
+          <svg viewBox="0 0 24 24" fill="currentColor" width="13" height="13"><path d="M20.3 4.4A19.5 19.5 0 0 0 16 3a13.5 13.5 0 0 0-.6 1.3 18 18 0 0 0-5.4 0A14.2 14.2 0 0 0 9.4 3a19.3 19.3 0 0 0-4.3 1.4A20.5 20.5 0 0 0 1.6 18a19.6 19.6 0 0 0 6 3 14.5 14.5 0 0 0 1.3-2.1 12.7 12.7 0 0 1-2-.9l.5-.4a13.9 13.9 0 0 0 11.9 0l.5.4a12.8 12.8 0 0 1-2 1 14.4 14.4 0 0 0 1.2 2.1 19.4 19.4 0 0 0 6-3A20.4 20.4 0 0 0 20.3 4.4ZM8.5 15.1c-1.2 0-2.1-1-2.1-2.3s.9-2.3 2.1-2.3 2.1 1 2.1 2.3-.9 2.3-2.1 2.3Zm7 0c-1.1 0-2.1-1-2.1-2.3s.9-2.3 2.1-2.3 2.1 1 2.1 2.3-.9 2.3-2.1 2.3Z"/></svg>
+          Discord
+        </span>
       </button>
-      <button class="fb-platform-btn" data-platform="guest" id="fb-guest-btn">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="13" height="13"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
-        Guest
+      <button class="btn fb-platform-btn" data-platform="guest" id="fb-guest-btn">
+        <span class="btn-in">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="13" height="13"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+          Guest
+        </span>
       </button>
     </div>
-    <input class="fb-username-input" id="fb-username" type="text" placeholder="GitHub username" autocomplete="off" spellcheck="false" />
+    <div class="fb-input-wrap" id="fb-input-wrap">
+      <input class="fb-username-input" id="fb-username" type="text" placeholder="GitHub username" autocomplete="off" spellcheck="false" />
+      <div class="fb-input-mirror" id="fb-input-mirror" aria-hidden="true"><div class="mi" id="fb-input-mi"></div></div>
+    </div>
     <div class="fb-verify-status" id="fb-verify-status"></div>
-    <button class="fb-submit-btn" id="fb-submit">Submit Feedback</button>
+    <button class="btn fb-submit-btn" id="fb-submit">
+      <span class="btn-in">Submit</span>
+    </button>
   </div>
 </div>
 
@@ -1363,6 +1427,7 @@ function cardHTML(p) {
           <span class="btn-in">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
             Status
+            <span class="status-badge" data-count-id="${escapeHtml(p.id)}" style="display:none;">0</span>
           </span>
         </button>
       </div>
@@ -1377,6 +1442,11 @@ function cardHTML(p) {
           <span class="btn-in">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" width="13" height="13"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
             Not Working
+          </span>
+        </button>
+        <button class="btn btn-fb-close" type="button" aria-label="Close feedback options">
+          <span class="btn-in">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" width="14" height="14"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
           </span>
         </button>
       </div>
@@ -1512,6 +1582,13 @@ function render() {
 grid.querySelectorAll('.card-feedback .btn-fb-broken').forEach(btn => {
   const card = btn.closest('.card'); const id = card.dataset.id;
   btn.addEventListener('click', () => openFeedbackModal('not-working', id, card));
+});
+grid.querySelectorAll('.card-feedback .btn-fb-close').forEach(btn => {
+  btn.addEventListener('click', (e) => {
+    e.stopPropagation();
+    const row = btn.closest('.card-feedback');
+    if (row) row.classList.remove('open');
+  });
 });
 }
 
@@ -1791,7 +1868,8 @@ function buildTabs(){
       tabs.querySelectorAll('.tab').forEach(x=>x.classList.remove('active'));
       b.classList.add('active');
       moveIndicator(true);
-      if(tabsBar)tabsBar.pulse(5); render();
+      if(tabsBar)tabsBar.pulse(5); 
+      setTimeout(render, 0);
     });
     tabs.appendChild(b);
     tabBtns.set(t.key, b);
@@ -1918,6 +1996,23 @@ async function loadLengths(){
   ));
 }
 
+async function fetchStatusCounts() {
+  await Promise.all(prompts.map(async (p) => {
+    try {
+      const res = await fetch(`${FEEDBACK_WORKER}/feedback/${encodeURIComponent(p.id)}`);
+      if (res.ok) {
+        const entries = await res.json();
+        if (entries && entries.length > 0) {
+          document.querySelectorAll(`.status-badge[data-count-id="${p.id}"]`).forEach(el => {
+            el.textContent = entries.length;
+            el.style.display = 'inline-flex';
+          });
+        }
+      }
+    } catch(e) {}
+  }));
+}
+
 /* ---------- Search ---------- */
 function syncSearchClear(){
   const input=document.getElementById('search');
@@ -1967,6 +2062,61 @@ function initTabArrows(){
 /* ============================================================
    Filter + search bar behaviour
    ============================================================ */
+function initFbBars() {
+  // Inject local gradient for Submit button to fix backdrop-filter context issue
+  const fbPanel = document.querySelector('.fb-panel');
+  if (fbPanel && !document.getElementById('indGFb')) {
+    const svgDefs = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
+    svgDefs.style.position = 'absolute'; svgDefs.style.width = 0; svgDefs.style.height = 0;
+    svgDefs.innerHTML = `<defs><linearGradient id="indGFb" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#8b5cf6"/><stop offset="1" stop-color="#06b6d4"/></linearGradient></defs>`;
+    fbPanel.appendChild(svgDefs);
+  }
+
+  // Initialize Transparency Note Bar
+  const fbNote = document.getElementById('fb-transparency-note');
+  if (fbNote && !fbNote.dataset.fluid) {
+    fbNote.dataset.fluid = '1';
+    const noteText = document.getElementById('fb-note-text');
+    noteText.innerHTML = disclaimerSpans(
+      'Sharing your username helps keep feedback transparent — others can trust it. Optional if you continue as guest.'
+    );
+    const noteChars = [...noteText.querySelectorAll('.ch')];
+    const noteBar = createBar(fbNote, { radius: 7, max: 5, sigma: 130, glow: 110 });
+    noteBar.setHook(() => {
+      liquidText(fbNote, noteBar, noteChars);
+      return false;
+    });
+  }
+
+  // Initialize Username Input Bar
+  const wrap = document.getElementById('fb-input-wrap');
+  const inp = document.getElementById('fb-username');
+  const mi = document.getElementById('fb-input-mi');
+  if (wrap && inp && mi && !wrap.dataset.fluid) {
+    wrap.dataset.fluid = '1';
+    const bar = createBar(wrap, { radius: 9, max: 6, sigma: 90 });
+    let chars = [];
+    
+    function buildMirror() {
+      const val = inp.value;
+      mi.classList.toggle('ph', !val);
+      mi.innerHTML = charSpans(val || inp.placeholder);
+      chars = [...mi.children];
+      bar.request();
+    }
+    buildMirror();
+    
+    bar.setHook(() => {
+      mi.style.transform = `translateX(${-inp.scrollLeft}px)`;
+      liquidText(wrap, bar, chars);
+      return false;
+    });
+    
+    inp.addEventListener('input', buildMirror);
+    ['keyup','click','select','focus','blur'].forEach(ev => inp.addEventListener(ev, () => bar.request()));
+  }
+}
+
 function initBars(){
   const NS='http://www.w3.org/2000/svg';
   const tabsWrap=document.getElementById('tabs-wrap');
@@ -2008,12 +2158,19 @@ function initBars(){
     if(!a)return false;
     const wr=tabsWrap.getBoundingClientRect(),r=a.getBoundingClientRect();
     const tl=r.left-wr.left,tr=r.right-wr.left;
-    if(IND.snap||!IND.init){IND.l=tl;IND.r=tr;IND.vl=IND.vr=0;IND.init=true;IND.snap=false;return false;}
-    const right=(tl+tr)>(IND.l+IND.r);
-    const kL=right?.10:.19,kR=right?.19:.10,damp=.70;
-    IND.vl=(IND.vl+(tl-IND.l)*kL)*damp;IND.l+=IND.vl;
-    IND.vr=(IND.vr+(tr-IND.r)*kR)*damp;IND.r+=IND.vr;
-    if(Math.abs(tl-IND.l)<.15&&Math.abs(tr-IND.r)<.15&&Math.abs(IND.vl)<.05&&Math.abs(IND.vr)<.05){IND.l=tl;IND.r=tr;IND.vl=IND.vr=0;return false;}
+    
+    if(IND.snap||!IND.init){
+      IND.l=tl; IND.r=tr; IND.init=true; IND.snap=false; return false;
+    }
+    
+    // Smooth exponential decay (no overshoot)
+    const k = 0.18;
+    IND.l += (tl - IND.l) * k;
+    IND.r += (tr - IND.r) * k;
+    
+    if(Math.abs(tl - IND.l) < 0.5 && Math.abs(tr - IND.r) < 0.5){
+      IND.l=tl; IND.r=tr; return false;
+    }
     return true;
   }
   tabsBar.setHook(()=>{
@@ -2187,11 +2344,11 @@ let _fbPlatform = 'github', _verifiedUser = null;
 
 function showFeedbackButtons(card, promptId) {
   document.querySelectorAll('.card-feedback').forEach(f => {
-    if (f.closest('.card') !== card) f.style.maxHeight = '0';
+    if (f.closest('.card') !== card) f.classList.remove('open');
   });
   const row = card.querySelector('.card-feedback');
   if (!row) return;
-  row.style.maxHeight = '56px';
+  row.classList.add('open');
   setTimeout(() => {
     row.querySelectorAll('.btn').forEach(btn => {
       if (!btn.dataset.fluid) {
@@ -2214,8 +2371,12 @@ function openFeedbackModal(option, promptId, card) {
   lbl.className = 'fb-option-label ' + (option === 'working' ? 'working' : 'not-working');
   document.getElementById('fb-username').value = '';
   document.getElementById('fb-verify-status').textContent = '';
+  const fbSubmitBtn = document.getElementById('fb-submit');
+  fbSubmitBtn.disabled = false;
+  fbSubmitBtn.querySelector('.btn-in').textContent = 'Submit';
   document.querySelectorAll('.fb-platform-btn').forEach(b => b.classList.toggle('active', b.dataset.platform === 'github'));
   document.getElementById('fb-username').placeholder = 'GitHub username';
+  document.getElementById('fb-username').dispatchEvent(new Event('input'));
   document.getElementById('fb-modal').classList.add('open');
   document.body.style.overflow = 'hidden';
   setTimeout(() => document.getElementById('fb-username').focus(), 200);
@@ -2278,7 +2439,9 @@ async function handleFbSubmit() {
     return;
   }
   const btn = document.getElementById('fb-submit');
-  btn.disabled = true; btn.textContent = 'Submitting…';
+  const btnIn = btn.querySelector('.btn-in');
+  const origText = btnIn.textContent;
+  btn.disabled = true; btnIn.textContent = 'Submitting…';
   statusEl.textContent = '';
   try {
     const res = await fetch(`${FEEDBACK_WORKER}/feedback`, {
@@ -2295,6 +2458,15 @@ async function handleFbSubmit() {
       closeFeedbackModal();
       _fbCard?.querySelector('.card-feedback')?.remove();
       showToast('Thanks for your feedback!');
+      
+      // Update the Status button badge count
+      const badge = document.querySelector(`.status-badge[data-count-id="${_fbPromptId}"]`);
+      if (badge) {
+        let count = parseInt(badge.textContent) || 0;
+        badge.textContent = count + 1;
+        badge.style.display = 'inline-flex';
+      }
+      
       if (_fbOption === 'working' && _fbCard) {
         const timeEl = _fbCard.querySelector('.checked time');
         if (timeEl) {
@@ -2306,7 +2478,7 @@ async function handleFbSubmit() {
     } else { throw new Error(); }
   } catch {
     showToast('Submission failed. Try again.', true);
-    btn.disabled = false; btn.textContent = 'Submit Feedback';
+    btn.disabled = false; btnIn.textContent = origText;
   }
 }
 
@@ -2428,6 +2600,7 @@ grid.addEventListener('pointerleave',()=>{tiltRelease(tiltCard);tiltCard=null;})
     document.getElementById('fb-verify-status').textContent = '';
     const inp = document.getElementById('fb-username');
     inp.placeholder = _fbPlatform === 'guest' ? 'Display name (optional)' : (_fbPlatform === 'discord' ? 'Discord username' : 'GitHub username');
+    inp.dispatchEvent(new Event('input'));
   }));
   // Status modal
   document.getElementById('status-close').addEventListener('click', closeStatusModal);
@@ -2464,7 +2637,10 @@ grid.addEventListener('pointerleave',()=>{tiltRelease(tiltCard);tiltCard=null;})
 
   render();
   loadLengths();
+  fetchStatusCounts();
   initBtnBars(document.querySelector('.modal-footer'));
+  initBtnBars(document.querySelector('.fb-panel'));
+  initFbBars();
 
   // ── Disclaimer: liquid bar + char bulge + mobile collapse ──
 const disclaimerEl = document.getElementById('disclaimer');

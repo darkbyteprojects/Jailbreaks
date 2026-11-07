@@ -97,8 +97,30 @@
     color: var(--text);
     transform: translateY(-1px);
   }
+  .nav-text {
+    white-space: nowrap;
+    overflow: hidden;
+    max-width: 120px;
+    opacity: 1;
+    transition: max-width 0.3s cubic-bezier(0.16,1,0.3,1), opacity 0.2s ease;
+  }
   @media (max-width: 768px) {
-    .top-nav-link { display: none; }
+    .top-nav-link { 
+      display: inline-flex; 
+      top: calc(16px + var(--safe-top)); 
+      right: 16px; 
+      padding: 7px 12px; 
+      font-size: 12px;
+      transition: gap 0.3s cubic-bezier(0.16,1,0.3,1), padding 0.3s ease;
+    }
+    .top-nav-link.scrolled {
+      gap: 0;
+      padding: 9px;
+    }
+    .top-nav-link.scrolled .nav-text {
+      max-width: 0;
+      opacity: 0;
+    }
   }
 
   /* BRAND */
@@ -1114,9 +1136,9 @@
 </head>
 <body>
 
-  <a href="https://prompt-checker.dbprojects.workers.dev/" target="_blank" rel="noopener" class="top-nav-link">
+  <a href="https://prompt-checker.dbprojects.workers.dev/" target="_blank" rel="noopener" class="top-nav-link" id="top-nav-btn">
     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="14" height="14"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path><polyline points="15 3 21 3 21 9"></polyline><line x1="10" y1="14" x2="21" y2="3"></line></svg>
-    Prompt Checker
+    <span class="nav-text">Prompt Checker</span>
   </a>
 
   <div class="page">
@@ -2574,6 +2596,16 @@ function timeAgo(iso) {
    INIT
    ============================================================ */
 function init(){
+  const navBtn = document.getElementById('top-nav-btn');
+  window.addEventListener('scroll', () => {
+    if (window.innerWidth <= 768) {
+      if (window.scrollY > 30) navBtn.classList.add('scrolled');
+      else navBtn.classList.remove('scrolled');
+    } else {
+      navBtn.classList.remove('scrolled');
+    }
+  }, { passive: true });
+
   initHeadFx();
   buildTabs();
   document.getElementById('search').placeholder = SEARCH_PLACEHOLDER;

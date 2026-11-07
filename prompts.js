@@ -117,13 +117,13 @@ window.SITE = {
 
 
     // ── Claude ─────────────────────────────────────────────────────────
-    { id: 'claude-01', model: 'claude', index: '01',
-      models: ['Sonnet 4.6'],
-      title: 'DarkByte — The Codex',
+    { id: "claude-01", model: "claude", index: "01",
+      models: ["Sonnet 4.6"],
+      title: "DarkByte — The Codex",
       desc: "Leonardo's invisible thread, rendered in amber. Full-spectrum operator with craft-first discipline and no dead air.",
-      path: 'claude/prompt_01.txt', checked: '2026-10-30',
-      note: 'State the topic you seek, it helps if you frame it first with words "Davinci saw..." or "Davinci wrote...", like he is doing it.',
-      noteTitle: 'Usage' },
+      path: "claude/prompt_01.txt", checked: "2026-10-30",
+      note: "State the topic you seek, it helps if you frame it first with words 'Davinci saw...' or 'Davinci wrote...', like he is doing it.",
+      noteTitle: "Usage" },
 
     { id: 'claude-02', model: 'claude', index: '02',
       models: ['Sonnet 4.6'],
